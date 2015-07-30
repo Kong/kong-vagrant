@@ -65,16 +65,20 @@ You should receive a JSON response:
 }
 ```
 
-## Going further
+## Coding
 
-From there, you can read futher development instructions in Kong's [README](https://github.com/Mashape/kong).
+The `lua_package_path` directive in the configuration specifies that the Lua code in your local folder will be used in favor of the system installation. The `lua_code_cache` directive being turned off, you can start Kong, edit your local files (on your host machine), and test your code without restarting Kong.
+
+Eventually, familiariwe yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile-operations).
+
+## Going further
 
 Other useful resources include:
 
 - Documentation: [getkong.org/docs][kong-docs]
 - Website: [getkong.org][kong-url]
 - Mailing List: [Google Groups][google-groups-url]
-- Gitter Chat: [Mashape/kong][gitter-url]
+- Gitter Chat: [gitter.im/Mashape/kong][gitter-url]
 
 [kong-url]: http://getkong.org/
 [kong-docs]: http://getkong.org/docs/

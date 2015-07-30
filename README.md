@@ -22,20 +22,23 @@ This will tell Vagrant to mount your local Kong repository under the guest's `/k
 
 The startup process will install all the dependencies necessary for developing (including Cassandra). The kong source code is mounted at `/kong`. The host ports `8000` and `8001` will be forwarded to the Vagrant box.
 
-## Building Kong
+## Building and running Kong
 
 To build Kong execute the following commands:
 
-1. From the host machine SSH into the Vagrant box: `vagrant ssh`
-2. Change to the root of the Kong source code: `cd /kong`
-3. Install your Kong development environment: `sudo make dev`
+```shell
+# SSH into the vagrant box
+$ vagrant ssh
 
-## Running Kong
+# switch to the mounted Kong repo
+$ cd /kong
 
-While SSHed into the Vagrant box, start Kong with the following commands:
+# install Kong
+$ sudo make dev
 
-1. Change to the root of the Kong source code: `cd /kong`
-2. Start kong `kong start -c kong_DEVELOPMENT.yml`
+# start Kong
+$ kong start -c kong_DEVELOPMENT.yml
+```
 
 ## Testing Kong
 

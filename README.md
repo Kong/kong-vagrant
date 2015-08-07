@@ -57,7 +57,7 @@ curl http://localhost:8001
 
 You should receive a JSON response:
 
-```json
+```javascript
 {
   "tagline": "Welcome to Kong",
   "version": "0.4.1",

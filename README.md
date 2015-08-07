@@ -1,4 +1,11 @@
-# Kong Vagrant
+# [KONG][website-url] :heavy_plus_sign: [Vagrant](https://www.vagrantup.com/)
+
+[![Website][website-badge]][website-url]
+[![Documentation][documentation-badge]][documentation-url]
+[![Mailing List][mailing-list-badge]][mailing-list-url]
+[![Gitter Badge][gitter-badge]][gitter-url]
+
+[![][kong-logo]][website-url]
 
 Vagrant is used to create an isolated development environment for Kong including Cassandra.
 
@@ -71,18 +78,16 @@ The `lua_package_path` directive in the configuration specifies that the Lua cod
 
 Eventually, familiariwe yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile-operations).
 
-## Going further
+## Enterprise Support
 
-Other useful resources include:
+Support, Demo, Training, API Certifications and Consulting available at http://getkong.org/enterprise.
 
-- Documentation: [getkong.org/docs][kong-docs]
-- Website: [getkong.org][kong-url]
-- Mailing List: [Google Groups][google-groups-url]
-- Gitter Chat: [gitter.im/Mashape/kong][gitter-url]
-
-[kong-url]: http://getkong.org/
-[kong-docs]: http://getkong.org/docs/
-
+[kong-logo]: http://i.imgur.com/4jyQQAZ.png
+[website-url]: https://getkong.org/
+[website-badge]: https://img.shields.io/badge/GETKong.org-Learn%20More-43bf58.svg
+[documentation-url]: https://getkong.org/docs/
+[documentation-badge]: https://img.shields.io/badge/Documentation-Read%20Online-green.svg
 [gitter-url]: https://gitter.im/Mashape/kong
-
-[google-groups-url]: https://groups.google.com/forum/#!forum/konglayer
+[gitter-badge]: https://img.shields.io/badge/Gitter-Join%20Chat-blue.svg
+[mailing-list-badge]: https://img.shields.io/badge/Email-Join%20Mailing%20List-blue.svg
+[mailing-list-url]: https://groups.google.com/forum/#!forum/konglayer

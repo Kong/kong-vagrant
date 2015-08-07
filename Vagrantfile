@@ -33,7 +33,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rm -rf $OUT
     mkdir -p $OUT
     cd $TMP
-    wget downloadkong.org/precise_all.deb
-    dpkg -i kong-*.deb
+    wget downloadkong.org/precise_all.deb -O kong.precise_all.deb
+    dpkg -i kong.precise_all.deb
+    rm kong.precise_all.deb
   "
 end

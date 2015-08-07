@@ -18,7 +18,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8001, host: 8001
 
   config.vm.provision "shell", inline: "
-    KONG_VERSION=0.4.1
     CASSANDRA_VERSION=2.1.8
 
     # Install Cassandra
@@ -34,7 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rm -rf $OUT
     mkdir -p $OUT
     cd $TMP
-    wget https://github.com/Mashape/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
+    wget downloadkong.org/precise_all.deb
     dpkg -i kong-*.deb
   "
 end

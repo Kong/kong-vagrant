@@ -52,7 +52,7 @@ $ kong start -c kong_DEVELOPMENT.yml
 To verify Kong is running successfully, execute the following command from the host machine:
 
 ```shell
-curl http://localhost:8001
+$ curl http://localhost:8001
 ```
 
 You should receive a JSON response:
@@ -76,7 +76,7 @@ You should receive a JSON response:
 
 The `lua_package_path` directive in the configuration specifies that the Lua code in your local folder will be used in favor of the system installation. The `lua_code_cache` directive being turned off, you can start Kong, edit your local files (on your host machine), and test your code without restarting Kong.
 
-Eventually, familiariwe yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile-operations).
+Eventually, familiarize yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile-operations).
 
 ## Enterprise Support
 

@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     echo 'deb http://debian.datastax.com/community stable main' | tee -a /etc/apt/sources.list.d/cassandra.sources.list
     curl -L http://debian.datastax.com/debian/repo_key | apt-key add -
     sudo apt-get update
-    sudo apt-get install make unzip netcat lua5.1 openssl libpcre3 dnsmasq openjdk-7-jdk cassandra=$CASSANDRA_VERSION -y --force-yes
+    sudo apt-get install git curl make unzip netcat lua5.1 openssl libpcre3 dnsmasq openjdk-7-jdk cassandra=$CASSANDRA_VERSION -y --force-yes
     echo 'nameserver 10.0.2.3' >> /etc/resolv.conf
     /etc/init.d/cassandra restart
 

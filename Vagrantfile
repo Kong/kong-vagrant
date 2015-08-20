@@ -9,8 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    vb.memory = 2048
   end
 
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box = "puphpet/ubuntu1404-x64"
 
   config.vm.synced_folder ENV["KONG_PATH"], "/kong"
 

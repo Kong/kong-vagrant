@@ -8,7 +8,7 @@ Vagrant.require_version ">= 1.4.3"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb|
    vb.name = "vagrant_kong"
-   vb.memory = 2048
+   vb.memory = ENV['KONG_VB_MEM'] || 2048
   end
 
   config.vm.box = "precise64"

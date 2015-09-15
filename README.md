@@ -27,7 +27,17 @@ $ KONG_PATH=/path/to/kong/clone/ vagrant up
 
 This will tell Vagrant to mount your local Kong repository under the guest's `/kong` folder.
 
-The startup process will install all the dependencies necessary for developing (including Cassandra). The kong source code is mounted at `/kong`. The host ports `8000` and `8001` will be forwarded to the Vagrant box.
+The startup process will install all the dependencies necessary for developing (including Cassandra). The Kong source code is mounted at `/kong`. The host ports `8000` and `8001` will be forwarded to the Vagrant box.
+
+### Environment Variables
+
+You can alter the behavior of the provision step by setting the following environment variables:
+
+| name            | description                                                               | default   |
+| --------------- | ------------------------------------------------------------------------- | --------- |
+| `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `latest`  |
+
 
 ## Building and running Kong
 

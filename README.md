@@ -37,6 +37,7 @@ You can alter the behavior of the provision step by setting the following enviro
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
 | `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `latest`  |
+| `KONG_VB_MEM`   | virtual machine memory (RAM) size                                         | `2048`    |
 
 
 ## Building and running Kong

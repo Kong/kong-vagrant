@@ -30,4 +30,8 @@ cd $TMP
 wget -q -O "precise_all.deb" "http://downloadkong.org/precise_all.deb?version=$KONG_VERSION"
 dpkg -i "precise_all.deb"
 
+# set ulimits
+sudo cp /tmp/limits.conf /etc/security/limits.conf
+rm -f /tmp/limits.conf
+
 echo "Successfully Installed Kong version: $KONG_VERSION"

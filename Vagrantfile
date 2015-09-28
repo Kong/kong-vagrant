@@ -37,5 +37,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001
 
+  config.vm.provision "file", source: "conf/limits.conf", destination: "/tmp/limits.conf"
   config.vm.provision "shell", path: "provision.sh", :args => version
 end

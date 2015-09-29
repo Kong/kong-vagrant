@@ -1,4 +1,4 @@
-# [KONG][website-url] :heavy_plus_sign: [Vagrant](https://www.vagrantup.com/)
+# [Kong][website-url] :heavy_plus_sign: [Vagrant](https://www.vagrantup.com/)
 
 [![Website][website-badge]][website-url]
 [![Documentation][documentation-badge]][documentation-url]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KONG_VERSION=$@
-CASSANDRA_VERSION=2.1.8
+CASSANDRA_VERSION=2.1.10
 
 echo "Installing Kong version: $KONG_VERSION"
 

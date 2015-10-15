@@ -14,8 +14,9 @@ Vagrant is used to create an isolated development environment for Kong including
 Once you have Vagrant installed, follow those steps:
 
 ```shell
-# clone the Kong repo
+# clone the Kong repo and switch to the next branch to use the latest, unrelease code
 $ git clone https://github.com/Mashape/kong
+$ git checkout next
 
 # clone this repository
 $ git clone https://github.com/Mashape/kong-vagrant

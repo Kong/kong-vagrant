@@ -17,7 +17,7 @@ echo 'deb http://debian.datastax.com/community stable main' | tee -a /etc/apt/so
 wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | apt-key add -
 
 sudo apt-get update
-sudo apt-get install git curl make unzip netcat lua5.1 openssl libpcre3 uuid-dev dnsmasq cassandra=$CASSANDRA_VERSION -y --force-yes
+sudo apt-get install git curl make pkg-config unzip netcat lua5.1 openssl libpcre3-dev uuid-dev dnsmasq cassandra=$CASSANDRA_VERSION -y --force-yes
 
 echo 'nameserver 10.0.2.3' >> /etc/resolv.conf
 /etc/init.d/cassandra restart

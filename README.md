@@ -72,7 +72,7 @@ You should receive a JSON response:
 ```javascript
 {
   "tagline": "Welcome to Kong",
-  "version": "0.4.1",
+  "version": "x.x.x",
   "hostname": "precise64",
   "lua_version": "LuaJIT 2.1.0-alpha",
   "plugins": {

@@ -22,6 +22,9 @@ sudo apt-get install git curl make pkg-config unzip netcat lua5.1 openssl libpcr
 echo 'nameserver 10.0.2.3' >> /etc/resolv.conf
 /etc/init.d/cassandra restart
 
+# Install Postgres
+sudo apt-get install postgresql -y --force-yes
+
 # Install latest Kong
 TMP=/tmp/build/tmp
 rm -rf $TMP

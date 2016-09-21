@@ -28,7 +28,7 @@ $ KONG_PATH=/path/to/kong/clone/ vagrant up
 
 This will tell Vagrant to mount your local Kong repository under the guest's `/kong` folder.
 
-The startup process will install all the dependencies necessary for developing (including Cassandra). The Kong source code is mounted at `/kong`. The host ports `8000` and `8001` will be forwarded to the Vagrant box.
+The startup process will install all the dependencies necessary for developing (including Cassandra). The Kong source code is mounted at `/kong`. The host ports `8000`, `8001` and `8443` will be forwarded to the Vagrant box.
 
 ### Environment Variables
 
@@ -37,7 +37,7 @@ You can alter the behavior of the provision step by setting the following enviro
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `latest`  |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.2`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `2048`    |
 
 
@@ -53,10 +53,10 @@ $ vagrant ssh
 $ cd /kong
 
 # install Kong
-$ sudo make dev
+$ make dev
 
 # start Kong
-$ kong start -c kong_DEVELOPMENT.yml
+$ KONG_DATABASE=cassandra kong start
 ```
 
 ## Testing Kong
@@ -88,7 +88,7 @@ You should receive a JSON response:
 
 The `lua_package_path` directive in the configuration specifies that the Lua code in your local folder will be used in favor of the system installation. The `lua_code_cache` directive being turned off, you can start Kong, edit your local files (on your host machine), and test your code without restarting Kong.
 
-Eventually, familiarize yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile-operations).
+Eventually, familiarize yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile).
 
 ## Enterprise Support
 

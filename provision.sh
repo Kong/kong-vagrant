@@ -33,4 +33,8 @@ sudo chown -R vagrant /usr/local
 # Adjust PATH
 export PATH=$PATH:/usr/local/bin
 
+# set ulimits
+sudo cp /tmp/limits.conf /etc/security/limits.conf
+rm -f /tmp/limits.conf
+
 echo "Successfully Installed Kong version: $KONG_VERSION"

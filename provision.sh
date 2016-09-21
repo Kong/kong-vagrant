@@ -1,33 +1,36 @@
 #!/bin/bash
 
 KONG_VERSION=$@
-CASSANDRA_VERSION=2.1.10
 
 echo "Installing Kong version: $KONG_VERSION"
 
-# Install Oracle Java
-sudo mkdir -p /usr/lib/jvm
-sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.tar.gz
-sudo tar zxvf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
-sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_60/bin/java' 1
-sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_60/bin/java
+sudo bash -c "echo 'nameserver 10.0.2.3' >> /etc/resolv.conf"
 
-# Install Cassandra
-echo 'deb http://debian.datastax.com/community stable main' | tee -a /etc/apt/sources.list.d/cassandra.sources.list
-wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | apt-key add -
+# Adding Datastax Yum repo
+sudo bash -c "cat >> /etc/yum.repos.d/datastax.repo" << EOL
+[datastax] 
+name = DataStax Repo for Apache Cassandra
+baseurl = https://rpm.datastax.com/community
+enabled = 1
+gpgcheck = 0
+EOL
 
-sudo apt-get update
-sudo apt-get install git curl make pkg-config unzip netcat lua5.1 openssl libpcre3-dev uuid-dev dnsmasq cassandra=$CASSANDRA_VERSION -y --force-yes
+# Installing Cassandra
+sudo yum install -y java-1.8.0 cassandra22
+sudo /etc/init.d/cassandra restart
+sudo chmod 777 -R /var/lib/cassandra
+sudo /etc/init.d/cassandra restart
 
-echo 'nameserver 10.0.2.3' >> /etc/resolv.conf
-/etc/init.d/cassandra restart
+# Installing other dependencies
+sudo yum install -y wget tar make curl ldconfig gcc pcre-devel openssl-devel unzip git
 
-# Install latest Kong
-TMP=/tmp/build/tmp
-rm -rf $TMP
-mkdir -p $TMP
-cd $TMP
-wget -q -O "precise_all.deb" "http://downloadkong.org/precise_all.deb?version=$KONG_VERSION"
-dpkg -i "precise_all.deb"
+# Installing Kong
+sudo yum install -y https://github.com/Mashape/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.el7.noarch.rpm
+
+# Assign permissions to "vagrant" user
+sudo chown -R vagrant /usr/local
+
+# Adjust PATH
+export PATH=$PATH:/usr/local/bin
 
 echo "Successfully Installed Kong version: $KONG_VERSION"

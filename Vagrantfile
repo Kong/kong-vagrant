@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV["KONG_VERSION"]
     version = ENV["KONG_VERSION"]
   else
-    version = "latest"
+    version = "0.9.2"
   end
 
   config.vm.provider :virtualbox do |vb|
@@ -29,13 +29,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    vb.memory = memory
   end
 
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box = "centos/7"
 
-  config.vm.synced_folder source, "/kong"
+  config.vm.synced_folder source, "/kong", type: "rsync"
 
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001
+  config.vm.network :forwarded_port, guest: 8443, host: 8443
 
   config.vm.provision "shell", path: "provision.sh", :args => version
 end

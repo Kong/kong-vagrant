@@ -52,9 +52,6 @@ $ vagrant ssh
 # switch to the mounted Kong repo
 $ cd /kong
 
-# install Kong
-$ make dev
-
 # start Kong
 $ KONG_DATABASE=cassandra kong start
 ```

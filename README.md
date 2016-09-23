@@ -56,7 +56,7 @@ $ cd /kong
 $ make dev
 
 # start Kong
-$ KONG_DATABASE=cassandra kong start
+$ kong start
 ```
 
 ## Testing Kong
@@ -89,6 +89,21 @@ You should receive a JSON response:
 The `lua_package_path` directive in the configuration specifies that the Lua code in your local folder will be used in favor of the system installation. The `lua_code_cache` directive being turned off, you can start Kong, edit your local files (on your host machine), and test your code without restarting Kong.
 
 Eventually, familiarize yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile).
+
+## Known Issues
+
+If for some reason the Vagrant box doesn't resolve properly DNS names, please execute the following comand on the host:
+
+```
+$ vagrant halt
+$ VBoxManage modifyvm "vagrant_kong" --natdnsproxy1 on
+```
+
+and then re-provision the image by running:
+
+```
+$ vagrant up --provision
+```
 
 ## Enterprise Support
 

@@ -16,6 +16,7 @@ Once you have Vagrant installed, follow those steps:
 ```shell
 # clone the Kong repo and switch to the next branch to use the latest, unrelease code
 $ git clone https://github.com/Mashape/kong
+$ cd kong
 $ git checkout next
 
 # clone this repository

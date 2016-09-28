@@ -43,6 +43,6 @@ sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev
 sudo chown -R vagrant /usr/local
 
 # Adjust PATH
-export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin
 
 echo "Successfully Installed Kong version: $KONG_VERSION"

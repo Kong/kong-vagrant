@@ -45,4 +45,14 @@ sudo chown -R vagrant /usr/local
 # Adjust PATH
 export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin
 
+# Set higher ulimit
+sudo bash -c 'echo "fs.file-max = 65536" >> /etc/sysctl.conf'
+sudo sysctl -p
+sudo bash -c "cat >> /etc/security/limits.conf" << EOL
+* soft     nproc          65535
+* hard     nproc          65535
+* soft     nofile         65535
+* hard     nofile         65535
+EOL
+
 echo "Successfully Installed Kong version: $KONG_VERSION"

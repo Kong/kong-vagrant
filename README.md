@@ -38,8 +38,8 @@ You can alter the behavior of the provision step by setting the following enviro
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.2`  |
-| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `2048`    |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.5`  |
+| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `512`    |
 
 
 ## Building and running Kong
@@ -93,6 +93,8 @@ Eventually, familiarize yourself with the [Makefile Operations](https://github.c
 
 ## Known Issues
 
+### DNS failure
+
 If for some reason the Vagrant box doesn't resolve properly DNS names, please execute the following comand on the host:
 
 ```
@@ -104,6 +106,29 @@ and then re-provision the image by running:
 
 ```
 $ vagrant up --provision
+```
+
+### Incompatible versions error
+
+When Kong starts it can give errors for incompatible versions. This happens for example when depedencies have been updated.
+eg. 0.9.2 required Openresty 1.9.15.1, whilst 0.9.5 requires 1.11.2.1. 
+
+So please reprovision it and specify the proper version you want to work with (either newer or older, see the defaults above), as in the example below with version 0.9.2;
+
+```shell
+# clone the Kong repo and switch explicitly to the 0.9.2 version.
+# this will get the proper Kong source code for the version.
+$ git clone https://github.com/Mashape/kong
+$ cd kong
+$ git checkout 0.9.2
+
+# clone this repository
+$ git clone https://github.com/Mashape/kong-vagrant
+$ cd kong-vagrant/
+
+# start a box with a folder synced to your local Kong clone, and
+# specifically targetting 0.9.2, to get the required binary versions
+$ KONG_PATH=/path/to/kong/clone/ KONG_VERSION=0.9.2 vagrant up
 ```
 
 ## Enterprise Support

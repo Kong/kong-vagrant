@@ -7,7 +7,7 @@
 
 [![][kong-logo]][website-url]
 
-Vagrant is used to create an isolated development environment for Kong including Cassandra.
+Vagrant is used to create an isolated development environment for Kong including Postgres.
 
 ## Starting the environment
 
@@ -29,7 +29,7 @@ $ KONG_PATH=/path/to/kong/clone/ vagrant up
 
 This will tell Vagrant to mount your local Kong repository under the guest's `/kong` folder.
 
-The startup process will install all the dependencies necessary for developing (including Cassandra). The Kong source code is mounted at `/kong`. The host ports `8000`, `8001` and `8443` will be forwarded to the Vagrant box.
+The startup process will install all the dependencies necessary for developing (including Postgres). The Kong source code is mounted at `/kong`. The host ports `8000`, `8001` and `8443` will be forwarded to the Vagrant box.
 
 ### Environment Variables
 

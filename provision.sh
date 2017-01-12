@@ -28,6 +28,7 @@ psql -U postgres <<EOF
 \x
 CREATE USER kong; 
 CREATE DATABASE kong OWNER kong;
+CREATE DATABASE kong_tests OWNER kong;
 EOF
 
 # Install Kong
@@ -44,6 +45,9 @@ sudo chown -R vagrant /usr/local
 
 # Adjust PATH
 export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin
+
+# Adjust PATH for future ssh
+echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin" >> /home/vagrant/.bashrc
 
 # Set higher ulimit
 sudo bash -c 'echo "fs.file-max = 65536" >> /etc/sysctl.conf'

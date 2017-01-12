@@ -31,8 +31,8 @@ CREATE DATABASE kong OWNER kong;
 EOF
 
 # Install Kong
-sudo apt-get install -y netcat openssl libpcre3 dnsmasq procps perl
 wget -O kong.deb https://github.com/Mashape/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
+sudo apt-get install -y netcat openssl libpcre3 dnsmasq procps perl
 sudo dpkg -i kong.deb
 rm kong.deb
 

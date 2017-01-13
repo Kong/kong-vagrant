@@ -59,4 +59,26 @@ sudo bash -c "cat >> /etc/security/limits.conf" << EOL
 * hard     nofile         65535
 EOL
 
-echo "Successfully Installed Kong version: $KONG_VERSION"
+# Create a Cassandra setup script
+cat <<EOT >> /home/vagrant/cassandra2_setup.sh
+# Install java runtime
+echo Fetching and installing java...
+sudo mkdir -p /usr/lib/jvm
+sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.tar.gz
+sudo tar zxvf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
+sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_60/bin/java' 1
+sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_60/bin/java
+
+# install cassandra
+echo Fetching and installing Cassandra...
+echo 'deb http://debian.datastax.com/community stable main' | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install cassandra=2.2.8 -y --force-yes
+sudo /etc/init.d/cassandra restart
+EOT
+
+chmod +x /home/vagrant/cassandra2_setup.sh
+
+echo "Successfully Installed Kong version: $KONG_VERSION, with Postgres."
+echo 'To setup Cassandra 2.x use the script at "~/cassandra2_setup.sh".'

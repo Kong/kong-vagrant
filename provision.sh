@@ -52,6 +52,9 @@ echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin" >> /home/vagra
 sudo apt-get install redis-server
 sudo chown vagrant /var/log/redis/redis-server.log
 
+# Prepare path to lua librairies
+ln -sfn /usr/local /home/vagrant/.luarocks
+
 # Set higher ulimit
 sudo bash -c 'echo "fs.file-max = 65536" >> /etc/sysctl.conf'
 sudo sysctl -p

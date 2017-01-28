@@ -7,7 +7,8 @@
 
 [![][kong-logo]][website-url]
 
-Vagrant is used to create an isolated development environment for Kong including Postgres.
+Vagrant is used to create an isolated development environment for Kong 
+including Postgres.
 
 ## Starting the environment
 
@@ -27,13 +28,18 @@ $ cd kong-vagrant/
 $ KONG_PATH=/path/to/kong/clone/ vagrant up
 ```
 
-This will tell Vagrant to mount your local Kong repository under the guest's `/kong` folder.
+This will tell Vagrant to mount your local Kong repository under the guest's 
+`/kong` folder.
 
-The startup process will install all the dependencies necessary for developing (including Postgres). The Kong source code is mounted at `/kong`. The host ports `8000`, `8001` and `8443` will be forwarded to the Vagrant box.
+The startup process will install all the dependencies necessary for developing 
+(including Postgres, Cassandra and Redis). The Kong source code is mounted at 
+`/kong`. The host ports `8000`, `8001` and `8443` will be forwarded to the 
+Vagrant box.
 
 ### Environment Variables
 
-You can alter the behavior of the provision step by setting the following environment variables:
+You can alter the behavior of the provision step by setting the following 
+environment variables:
 
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
@@ -57,12 +63,13 @@ $ cd /kong
 $ make dev
 
 # start Kong
-$ kong start
+$ bin/kong start
 ```
 
 ## Testing Kong
 
-To verify Kong is running successfully, execute the following command from the host machine:
+To verify Kong is running successfully, execute the following command from the 
+host machine:
 
 ```shell
 $ curl http://localhost:8001
@@ -87,15 +94,20 @@ You should receive a JSON response:
 
 ## Coding
 
-The `lua_package_path` directive in the configuration specifies that the Lua code in your local folder will be used in favor of the system installation. The `lua_code_cache` directive being turned off, you can start Kong, edit your local files (on your host machine), and test your code without restarting Kong.
+The `lua_package_path` directive in the configuration specifies that the Lua 
+code in your local folder will be used in favor of the system installation. 
+The `lua_code_cache` directive being turned off, you can start Kong, edit your 
+local files (on your host machine), and test your code without restarting Kong.
 
-Eventually, familiarize yourself with the [Makefile Operations](https://github.com/Mashape/kong#makefile).
+Eventually, familiarize yourself with the 
+[Makefile Operations](https://github.com/Mashape/kong#makefile).
 
 ## Known Issues
 
 ### DNS failure
 
-If for some reason the Vagrant box doesn't resolve properly DNS names, please execute the following comand on the host:
+If for some reason the Vagrant box doesn't resolve properly DNS names, please 
+execute the following comand on the host:
 
 ```
 $ vagrant halt
@@ -110,10 +122,13 @@ $ vagrant up --provision
 
 ### Incompatible versions error
 
-When Kong starts it can give errors for incompatible versions. This happens for example when depedencies have been updated.
-eg. 0.9.2 required Openresty 1.9.15.1, whilst 0.9.5 requires 1.11.2.1. 
+When Kong starts it can give errors for incompatible versions. This happens for 
+example when depedencies have been updated. Eg. 0.9.2 required Openresty 
+1.9.15.1, whilst 0.9.5 requires 1.11.2.1. 
 
-So please reprovision it and specify the proper version you want to work with (either newer or older, see the defaults above), as in the example below with version 0.9.2;
+So please reprovision it and specify the proper version you want to work with 
+(either newer or older, see the defaults above), as in the example below with 
+version 0.9.2;
 
 ```shell
 # clone the Kong repo and switch explicitly to the 0.9.2 version.

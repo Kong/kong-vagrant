@@ -44,8 +44,9 @@ environment variables:
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.5`  |
-| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `512`    |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.5`   |
+| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `512`     |
+| `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/plugin` folder | `../kong-plugin` |
 
 
 ## Building and running Kong
@@ -92,14 +93,80 @@ You should receive a JSON response:
 }
 ```
 
+## Developing plugins
+
+Clone the plugin template next to your clones of Kong and Kong-vagrant:
+
+```shell
+# clone the plugin template repository
+$ git clone https://github.com/Mashape/kong-plugin
+```
+
+Setup Kong to use the plugin:
+```shell
+# SSH into the vagrant box
+$ vagrant ssh
+
+# tell Kong to load the custom plugin
+$ export KONG_CUSTOM_PLUGINS=myPlugin
+
+# start Kong
+$ cd /kong
+$ bin/kong start
+```
+
+To verify Kong has loaded the plugin successfully, execute the following command 
+from the host machine:
+
+```shell
+$ curl http://localhost:8001
+```
+In the response you get, the plugins list should now contain an entry "myPlugin"
+to indicate the plugin was loaded.
+
+To start using the plugin, execute from the host:
+```shell
+# create an api that simply echoes the request using mockbin, using a 
+# 'catch-all' setup with the request path set to '/'
+$ curl -i -X POST \
+  --url http://localhost:8001/apis/ \
+  --data 'name=mockbin' \
+  --data 'upstream_url=http://mockbin.org/request' \
+  --data 'request_path=/'
+
+# add the custom plugin, to our new api
+$ curl -i -X POST \
+  --url http://localhost:8001/apis/mockbin/plugins/ \
+  --data 'name=myPlugin'
+```
+
+Check whether it is working by making a request from the host:
+```shell
+$ curl -i http://localhost:8000
+```
+The response you get should be an echo (by Mockbin) of the request. But in the
+response headers the plugin has now inserted a header `Hello-World`.
+
+
 ## Coding
 
-The `lua_package_path` directive in the configuration specifies that the Lua 
-code in your local folder will be used in favor of the system installation. 
-The `lua_code_cache` directive being turned off, you can start Kong, edit your 
-local files (on your host machine), and test your code without restarting Kong.
+- `export KONG_LUA_CODE_CACHE=false` turns the code caching off, you can start 
+  Kong, edit your local files (on your host machine), and test your code without 
+  restarting Kong.
+- `export KONG_LOG_LEVEL=debug` to show detailed logs when coding
+- `export KONG_PREFIX=/kong/servroot` will set the Kong working directory to 
+  the same location where the tests run. It is in the Kong tree, excluded from the
+  git repo, and accessible from the host to check logs when coding.
 
-Eventually, familiarize yourself with the 
+## Testing
+
+- run the tests from the vagrant box. Not from the host.
+- stop Kong before running the tests
+- clear any environment variables set before testing
+- `cd /kong && bin/busted` to run the tests. Check busted documentation for
+  additional commandline options.
+
+Eventually, to test Kong familiarize yourself with the 
 [Makefile Operations](https://github.com/Mashape/kong#makefile).
 
 ## Known Issues

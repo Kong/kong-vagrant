@@ -50,10 +50,13 @@ export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin
 # Adjust PATH for future ssh
 echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin" >> /home/vagrant/.bashrc
 
+# Adjust LUA_PATH to find the plugin dev setup
+echo "export LUA_PATH=\"/plugin/?.lua;/plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
+
 sudo apt-get install redis-server
 sudo chown vagrant /var/log/redis/redis-server.log
 
-# Prepare path to lua librairies
+# Prepare path to lua libraries
 ln -sfn /usr/local /home/vagrant/.luarocks
 
 # Set higher ulimit

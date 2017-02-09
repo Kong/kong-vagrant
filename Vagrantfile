@@ -12,16 +12,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     source = "../kong"
   end
 
+  if ENV["KONG_PLUGIN_PATH"]
+    plugin_source = ENV["KONG_PLUGIN_PATH"]
+  else
+    plugin_source = "../kong-plugin"
+  end
+
   if ENV['KONG_VB_MEM']
     memory = ENV["KONG_VB_MEM"]
   else
-    memory = 512
+    memory = 1024
   end
 
   if ENV["KONG_VERSION"]
     version = ENV["KONG_VERSION"]
   else
-    version = "0.9.8"
+    version = "0.9.9"
   end
 
   config.vm.provider :virtualbox do |vb|
@@ -32,6 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "hashicorp/precise64"
 
   config.vm.synced_folder source, "/kong"
+  config.vm.synced_folder plugin_source, "/plugin"
 
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001

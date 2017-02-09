@@ -44,8 +44,8 @@ environment variables:
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.5`   |
-| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `512`     |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.9`   |
+| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/plugin` folder | `../kong-plugin` |
 
 
@@ -149,10 +149,9 @@ response headers the plugin has now inserted a header `Bye-World`.
 
 ## Testing plugins
 
-The plugin tests can use the hlpers that come with the Kong repo for testing.
+The plugin tests can use the helpers that come with the Kong repo for testing.
 To execute the basic tests that come with the plugin execute:
 
-Setup Kong to use the plugin:
 ```shell
 # SSH into the vagrant box
 $ vagrant ssh

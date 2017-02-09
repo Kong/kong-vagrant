@@ -8,7 +8,7 @@
 [![][kong-logo]][website-url]
 
 Vagrant is used to create an isolated development environment for Kong 
-including Postgres.
+including Postgres, Cassandra and Redis.
 
 ## Starting the environment
 
@@ -19,13 +19,14 @@ Once you have Vagrant installed, follow those steps:
 $ git clone https://github.com/Mashape/kong
 $ cd kong
 $ git checkout next
+$ cd ..
 
 # clone this repository
 $ git clone https://github.com/Mashape/kong-vagrant
 $ cd kong-vagrant/
 
 # start a box with a folder synced to your local Kong clone
-$ KONG_PATH=/path/to/kong/clone/ vagrant up
+$ vagrant up
 ```
 
 This will tell Vagrant to mount your local Kong repository under the guest's 
@@ -48,6 +49,10 @@ environment variables:
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/plugin` folder | `../kong-plugin` |
 
+Use them when provisioning, e.g.:
+```shell
+$ KONG_VERSION=0.9.5 KONG_VB_MEM=2048 vagrant up
+```
 
 ## Building and running Kong
 
@@ -95,7 +100,7 @@ You should receive a JSON response:
 
 ## Developing plugins
 
-Clone the plugin template next to your clones of Kong and Kong-vagrant:
+Clone the plugin template next to your clones of `kong` and `kong-vagrant`:
 
 ```shell
 # clone the plugin template repository
@@ -232,7 +237,7 @@ $ cd kong-vagrant/
 
 # start a box with a folder synced to your local Kong clone, and
 # specifically targetting 0.9.2, to get the required binary versions
-$ KONG_PATH=/path/to/kong/clone/ KONG_VERSION=0.9.2 vagrant up
+$ KONG_VERSION=0.9.2 vagrant up
 ```
 
 ## Enterprise Support

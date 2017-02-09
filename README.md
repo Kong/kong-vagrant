@@ -145,7 +145,30 @@ Check whether it is working by making a request from the host:
 $ curl -i http://localhost:8000
 ```
 The response you get should be an echo (by Mockbin) of the request. But in the
-response headers the plugin has now inserted a header `Hello-World`.
+response headers the plugin has now inserted a header `Bye-World`.
+
+## Testing plugins
+
+The plugin tests can use the hlpers that come with the Kong repo for testing.
+To execute the basic tests that come with the plugin execute:
+
+Setup Kong to use the plugin:
+```shell
+# SSH into the vagrant box
+$ vagrant ssh
+
+#enter the Kong repo
+cd /kong
+
+# if not done so already make a dev environment
+$ make dev
+
+# run the plugin tests from the Kong repo
+$ bin/busted /plugin/spec
+
+# for more verbose output do
+$ bin/busted -v -o gtest /plugin/spec
+```
 
 
 ## Coding

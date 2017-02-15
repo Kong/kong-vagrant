@@ -137,7 +137,7 @@ $ curl -i -X POST \
   --url http://localhost:8001/apis/ \
   --data 'name=mockbin' \
   --data 'upstream_url=http://mockbin.org/request' \
-  --data 'request_path=/'
+  --data 'uris=/'
 
 # add the custom plugin, to our new api
 $ curl -i -X POST \

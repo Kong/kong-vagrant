@@ -15,7 +15,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV["KONG_PLUGIN_PATH"]
     plugin_source = ENV["KONG_PLUGIN_PATH"]
   else
+    # set default, if it doesn't exist, point to Kong itself
     plugin_source = "../kong-plugin"
+    if not File.directory?(plugin_source)
+      plugin_source = source
+    end
   end
 
   if ENV['KONG_VB_MEM']

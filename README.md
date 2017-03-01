@@ -240,6 +240,12 @@ $ cd kong-vagrant/
 $ KONG_VERSION=0.9.2 vagrant up
 ```
 
+### Vagrant error; The box 'hashicorp/precise64' could not be found
+
+There is a known issue with Vagrant on OS X with an included `curl` version
+that fails. See [stack overflow](http://stackoverflow.com/questions/40473943/vagrant-box-could-not-be-found-or-could-not-be-accessed-in-the-remote-catalog)
+for a solution.
+
 ## Enterprise Support
 
 Support, Demo, Training, API Certifications and Consulting available at http://getkong.org/enterprise.

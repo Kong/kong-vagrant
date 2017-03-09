@@ -45,7 +45,7 @@ environment variables:
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.9.9`   |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.0`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/plugin` folder | `../kong-plugin` |
 
@@ -133,11 +133,12 @@ To start using the plugin, execute from the host:
 ```shell
 # create an api that simply echoes the request using mockbin, using a 
 # 'catch-all' setup with the request path set to '/'
+# NOTE: for pre-0.10 versions 'uris=' below should be 'request_path='
 $ curl -i -X POST \
   --url http://localhost:8001/apis/ \
   --data 'name=mockbin' \
   --data 'upstream_url=http://mockbin.org/request' \
-  --data 'request_path=/'
+  --data 'uris=/'
 
 # add the custom plugin, to our new api
 $ curl -i -X POST \

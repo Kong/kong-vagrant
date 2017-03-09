@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV["KONG_VERSION"]
     version = ENV["KONG_VERSION"]
   else
-    version = "0.9.9"
+    version = "0.10.0"
   end
 
   config.vm.provider :virtualbox do |vb|

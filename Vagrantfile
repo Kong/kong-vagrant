@@ -15,11 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV["KONG_PLUGIN_PATH"]
     plugin_source = ENV["KONG_PLUGIN_PATH"]
   else
-    # set default, if it doesn't exist, point to Kong itself
     plugin_source = "../kong-plugin"
-    if not File.directory?(plugin_source)
-      plugin_source = source
-    end
   end
 
   if ENV['KONG_VB_MEM']
@@ -41,8 +37,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "hashicorp/precise64"
 
-  config.vm.synced_folder source, "/kong"
-  config.vm.synced_folder plugin_source, "/plugin"
+  if File.directory?(source)
+    config.vm.synced_folder source, "/kong"
+  end
+  if File.directory?(plugin_source)
+    config.vm.synced_folder plugin_source, "/plugin"
+  end
 
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001

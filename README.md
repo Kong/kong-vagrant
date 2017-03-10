@@ -44,14 +44,15 @@ environment variables:
 
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
-| `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
 | `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.0`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
-| `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/plugin` folder | `../kong-plugin` |
+| `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
+| `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |
+| `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
 
 Use them when provisioning, e.g.:
 ```shell
-$ KONG_VERSION=0.9.5 KONG_VB_MEM=2048 vagrant up
+$ KONG_VERSION=0.9.5 vagrant up
 ```
 
 ## Building and running Kong
@@ -169,10 +170,10 @@ cd /kong
 $ make dev
 
 # run the plugin tests from the Kong repo
-$ bin/busted /plugin/spec
+$ bin/busted /kong-plugin/spec
 
 # for more verbose output do
-$ bin/busted -v -o gtest /plugin/spec
+$ bin/busted -v -o gtest /kong-plugin/spec
 ```
 
 
@@ -199,26 +200,10 @@ Eventually, to test Kong familiarize yourself with the
 
 ## Known Issues
 
-### DNS failure
-
-If for some reason the Vagrant box doesn't resolve properly DNS names, please 
-execute the following comand on the host:
-
-```
-$ vagrant halt
-$ VBoxManage modifyvm "vagrant_kong" --natdnsproxy1 on
-```
-
-and then re-provision the image by running:
-
-```
-$ vagrant up --provision
-```
-
 ### Incompatible versions error
 
 When Kong starts it can give errors for incompatible versions. This happens for 
-example when depedencies have been updated. Eg. 0.9.2 required Openresty 
+example when dependencies have been updated. Eg. 0.9.2 required Openresty 
 1.9.15.1, whilst 0.9.5 requires 1.11.2.1. 
 
 So please reprovision it and specify the proper version you want to work with 
@@ -231,6 +216,7 @@ version 0.9.2;
 $ git clone https://github.com/Mashape/kong
 $ cd kong
 $ git checkout 0.9.2
+$ cd ..
 
 # clone this repository
 $ git clone https://github.com/Mashape/kong-vagrant

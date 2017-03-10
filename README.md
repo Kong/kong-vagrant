@@ -65,9 +65,6 @@ $ vagrant ssh
 # switch to the mounted Kong repo
 $ cd /kong
 
-# install Kong
-$ make dev
-
 # start Kong
 $ bin/kong start
 ```

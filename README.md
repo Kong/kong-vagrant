@@ -21,6 +21,9 @@ $ cd kong
 $ git checkout next
 $ cd ..
 
+# clone the Kong Plugin repo required to run the Vagrant box
+$ git clone https://github.com/Mashape/kong-plugin
+
 # clone this repository
 $ git clone https://github.com/Mashape/kong-vagrant
 $ cd kong-vagrant/

@@ -159,7 +159,7 @@ $ bin/kong start
 ### Testing Kong and custom plugins
 
 To use the test helpers from the Kong repo, you must first setup the 
-development enviornment as mentioned above.
+development environment as mentioned above.
 
 To run test suites, you should first stop Kong, and clear any environment
 variables you've set to prevent them from interfering with the tests.
@@ -208,7 +208,7 @@ Eventually, to test Kong familiarize yourself with the
   the same location where the tests run. It is in the Kong tree, excluded from the
   git repo, and accessible from the host to check logs when coding.
 
-## Environment Variables
+## Environment variables and configuration
 
 You can alter the behavior of the provision step by setting the following 
 environment variables:
@@ -225,6 +225,35 @@ Use them when provisioning, e.g.:
 ```shell
 $ KONG_VERSION=0.9.5 vagrant up
 ```
+
+The `_PATH` variables are will take the value set, or the defaults, but the 
+defaults will only be taken if they actually exist. As such the defaults allow
+for 2 file structures, without any configuration.
+
+Structure where everything resides inside the `kong-vagrant` repo:
+```
+-some_dir
+  |-kong-vagrant
+     |-kong
+     |-kong-plugin
+```
+
+or if you prefer all repos on the same level:
+```
+-some_dir
+  |-kong-vagrant
+  |-kong
+  |-kong-plugin
+```
+
+
+The (non-configurable) exposed ports are;
+
+- `8000` proxy port
+- `8143` ssl proxy port
+- `8001` admin api
+
+These are mapped 1-on-1 between the host and guest.
 
 ## Known Issues
 

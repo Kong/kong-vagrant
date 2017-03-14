@@ -7,75 +7,42 @@
 
 [![][kong-logo]][website-url]
 
-Vagrant is used to create an isolated development environment for Kong 
+Vagrant is used to create an isolated environment for Kong 
 including Postgres, Cassandra and Redis.
 
-## Starting the environment
-
-Once you have Vagrant installed, follow those steps:
-
-```shell
-# clone the Kong repo and switch to the next branch to use the latest, unrelease code
-$ git clone https://github.com/Mashape/kong
-$ cd kong
-$ git checkout next
-$ cd ..
-
-# clone this repository
-$ git clone https://github.com/Mashape/kong-vagrant
-$ cd kong-vagrant/
-
-# start a box with a folder synced to your local Kong clone
-$ vagrant up
-```
-
-This will tell Vagrant to mount your local Kong repository under the guest's 
-`/kong` folder.
-
-The startup process will install all the dependencies necessary for developing 
-(including Postgres, Cassandra and Redis). The Kong source code is mounted at 
-`/kong`. The host ports `8000`, `8001` and `8443` will be forwarded to the 
-Vagrant box.
-
-### Environment Variables
-
-You can alter the behavior of the provision step by setting the following 
-environment variables:
-
-| name            | description                                                               | default   |
-| --------------- | ------------------------------------------------------------------------- | --------- |
-| `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `../kong` |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.0`  |
-| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
-| `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/plugin` folder | `../kong-plugin` |
-
-Use them when provisioning, e.g.:
-```shell
-$ KONG_VERSION=0.9.5 KONG_VB_MEM=2048 vagrant up
-```
-
-## Building and running Kong
-
-To build Kong execute the following commands:
-
-```shell
-# SSH into the vagrant box
-$ vagrant ssh
-
-# switch to the mounted Kong repo
-$ cd /kong
-
-# install Kong
-$ make dev
-
-# start Kong
-$ bin/kong start
-```
+You can use the vagrant box either as an all-in-one Kong installation for
+testing purposes, or you can link it up with source code and start developing
+on Kong or on custom plugins.
 
 ## Testing Kong
 
-To verify Kong is running successfully, execute the following command from the 
-host machine:
+If you just want to give Kong a test ride, and you have Vagrant installed, 
+then you can simply clone this vagrant repo, and build the vm.
+
+```shell
+# clone this repository
+$ git clone https://github.com/Mashape/kong-vagrant
+$ cd kong-vagrant
+
+# build the machine
+$ vagrant up
+
+# start Kong, by ssh into the vm
+$ vagrant ssh
+$ kong start
+
+# alternatively use ssh -c option to start Kong
+$ vagrant ssh -c "kong start"
+```
+
+Kong is now started and is available on the default ports;
+
+- `8000` proxy port
+- `8143` ssl proxy port
+- `8001` admin api
+
+To verify Kong is running successfully, execute the following command (from
+the host machine):
 
 ```shell
 $ curl http://localhost:8001
@@ -98,27 +65,45 @@ You should receive a JSON response:
 }
 ```
 
-## Developing plugins
+See the environments variables section below for defaults used and how to
+modify the settings of the Vagrant machine. 
 
-Clone the plugin template next to your clones of `kong` and `kong-vagrant`:
+## Development environment
+
+Once you have Vagrant installed, follow these steps to set up a development
+environment for both Kong itself as well as for custum plugins. It will
+install the development dependencies like the `busted` test framework.
 
 ```shell
-# clone the plugin template repository
+# clone this repository
+$ git clone https://github.com/Mashape/kong-vagrant
+$ cd kong-vagrant
+
+# clone the Kong repo (inside the vagrant one)
+$ git clone https://github.com/Mashape/kong
+
+# only if you want to develop a custom plugin, also clone the plugin template
 $ git clone https://github.com/Mashape/kong-plugin
-```
 
-Setup Kong to use the plugin:
-```shell
-# SSH into the vagrant box
+# build a box with a folder synced to your local Kong and plugin sources
+$ vagrant up
+
+# ssh into the Vagrant machine, and setup the dev environment
 $ vagrant ssh
+$ cd /kong
+$ make dev
 
-# tell Kong to load the custom plugin
+# only if you want to run the custom plugin, tell Kong to load it
 $ export KONG_CUSTOM_PLUGINS=myPlugin
 
-# start Kong
+# startup kong: while inside '/kong' call the start script from the repo!
 $ cd /kong
 $ bin/kong start
 ```
+
+This will tell Vagrant to mount your local Kong repository under the guest's 
+`/kong` folder, and (if you cloned it) the 'kong-plugin' repository under the
+guest's `/kong-plugin` folder.
 
 To verify Kong has loaded the plugin successfully, execute the following command 
 from the host machine:
@@ -132,7 +117,7 @@ to indicate the plugin was loaded.
 To start using the plugin, execute from the host:
 ```shell
 # create an api that simply echoes the request using mockbin, using a 
-# 'catch-all' setup with the request path set to '/'
+# 'catch-all' setup with the `uris` field set to '/'
 # NOTE: for pre-0.10 versions 'uris=' below should be 'request_path='
 $ curl -i -X POST \
   --url http://localhost:8001/apis/ \
@@ -153,30 +138,67 @@ $ curl -i http://localhost:8000
 The response you get should be an echo (by Mockbin) of the request. But in the
 response headers the plugin has now inserted a header `Bye-World`.
 
-## Testing plugins
+### Running Kong from the source repo
 
-The plugin tests can use the helpers that come with the Kong repo for testing.
-To execute the basic tests that come with the plugin execute:
+Because the start and stop scripts are in the repository, you must use those
+to stop and start kong. Using the scripts that came with the base version you
+specified when building the Vagrant box will lead to unpredictable results.
 
 ```shell
-# SSH into the vagrant box
+# ssh into the Vagrant machine
 $ vagrant ssh
 
-#enter the Kong repo
-cd /kong
+# only if you want to run the custom plugin, tell Kong to load it
+$ export KONG_CUSTOM_PLUGINS=myPlugin
 
-# if not done so already make a dev environment
-$ make dev
-
-# run the plugin tests from the Kong repo
-$ bin/busted /plugin/spec
-
-# for more verbose output do
-$ bin/busted -v -o gtest /plugin/spec
+# startup kong: while inside '/kong' call the start script from the repo!
+$ cd /kong
+$ bin/kong start
 ```
 
+### Testing Kong and custom plugins
 
-## Coding
+To use the test helpers from the Kong repo, you must first setup the 
+development environment as mentioned above.
+
+To run test suites, you should first stop Kong, and clear any environment
+variables you've set to prevent them from interfering with the tests.
+
+The test environment has the same limitation as running from source in that it
+must be executed from the Kong source repo at `/kong`, inside the Vagrant
+machine.
+
+```shell
+# ssh into the Vagrant machine
+$ vagrant ssh
+
+# testing: while inside '/kong' call `busted` from the repo!
+$ cd /kong
+$ bin/busted
+
+# or for more verbose output do
+$ bin/busted -v -o gtest
+```
+
+Note that Kong comes with a special Busted script that runs against the
+OpenResty environment, instead of regular busted which runs against Lua(JIT)
+directly.
+
+To test the plugin specific tests:
+```shell
+# ssh into the Vagrant machine
+$ vagrant ssh
+
+# testing: while inside '/kong' call `busted` from the repo, but specify
+# the plugin testsuite to be executed
+$ cd /kong
+$ bin/busted /kong-plugin/spec
+```
+
+Eventually, to test Kong familiarize yourself with the 
+[Makefile Operations](https://github.com/Mashape/kong#makefile).
+
+### Development tips and tricks
 
 - `export KONG_LUA_CODE_CACHE=false` turns the code caching off, you can start 
   Kong, edit your local files (on your host machine), and test your code without 
@@ -186,39 +208,59 @@ $ bin/busted -v -o gtest /plugin/spec
   the same location where the tests run. It is in the Kong tree, excluded from the
   git repo, and accessible from the host to check logs when coding.
 
-## Testing
+## Environment variables and configuration
 
-- run the tests from the vagrant box. Not from the host.
-- stop Kong before running the tests
-- clear any environment variables set before testing
-- `cd /kong && bin/busted` to run the tests. Check busted documentation for
-  additional commandline options.
+You can alter the behavior of the provision step by setting the following 
+environment variables:
 
-Eventually, to test Kong familiarize yourself with the 
-[Makefile Operations](https://github.com/Mashape/kong#makefile).
+| name            | description                                                               | default   |
+| --------------- | ------------------------------------------------------------------------- | --------- |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.0`  |
+| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
+| `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
+| `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |
+| `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
+
+Use them when provisioning, e.g.:
+```shell
+$ KONG_VERSION=0.9.5 vagrant up
+```
+
+The `_PATH` variables are will take the value set, or the defaults, but the 
+defaults will only be taken if they actually exist. As such the defaults allow
+for 2 file structures, without any configuration.
+
+Structure where everything resides inside the `kong-vagrant` repo:
+```
+-some_dir
+  |-kong-vagrant
+     |-kong
+     |-kong-plugin
+```
+
+or if you prefer all repos on the same level:
+```
+-some_dir
+  |-kong-vagrant
+  |-kong
+  |-kong-plugin
+```
+
+
+The (non-configurable) exposed ports are;
+
+- `8000` proxy port
+- `8143` ssl proxy port
+- `8001` admin api
+
+These are mapped 1-on-1 between the host and guest.
 
 ## Known Issues
-
-### DNS failure
-
-If for some reason the Vagrant box doesn't resolve properly DNS names, please 
-execute the following comand on the host:
-
-```
-$ vagrant halt
-$ VBoxManage modifyvm "vagrant_kong" --natdnsproxy1 on
-```
-
-and then re-provision the image by running:
-
-```
-$ vagrant up --provision
-```
 
 ### Incompatible versions error
 
 When Kong starts it can give errors for incompatible versions. This happens for 
-example when depedencies have been updated. Eg. 0.9.2 required Openresty 
+example when dependencies have been updated. Eg. 0.9.2 required Openresty 
 1.9.15.1, whilst 0.9.5 requires 1.11.2.1. 
 
 So please reprovision it and specify the proper version you want to work with 
@@ -226,15 +268,16 @@ So please reprovision it and specify the proper version you want to work with
 version 0.9.2;
 
 ```shell
+# clone this repository
+$ git clone https://github.com/Mashape/kong-vagrant
+$ cd kong-vagrant/
+
 # clone the Kong repo and switch explicitly to the 0.9.2 version.
 # this will get the proper Kong source code for the version.
 $ git clone https://github.com/Mashape/kong
 $ cd kong
 $ git checkout 0.9.2
-
-# clone this repository
-$ git clone https://github.com/Mashape/kong-vagrant
-$ cd kong-vagrant/
+$ cd ..
 
 # start a box with a folder synced to your local Kong clone, and
 # specifically targetting 0.9.2, to get the required binary versions

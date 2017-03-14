@@ -1,1 +1,7 @@
+# workdirectory
 .vagrant/
+
+# source code locations
+kong/
+kong-plugin/
+

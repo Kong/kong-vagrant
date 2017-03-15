@@ -84,12 +84,6 @@ rm kong.deb
 # Adjust PATH
 export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin
 
-# Adjust PATH for future ssh
-echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin" >> /home/vagrant/.bashrc
-
-# Adjust LUA_PATH to find the plugin dev setup
-echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
-
 # Prepare path to lua libraries
 ln -sfn /usr/local /home/vagrant/.luarocks
 
@@ -102,5 +96,19 @@ sudo bash -c "cat >> /etc/security/limits.conf" << EOL
 * soft     nofile         65535
 * hard     nofile         65535
 EOL
+
+
+#############
+# Finish... #
+#############
+
+# Adjust PATH for future ssh
+echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin" >> /home/vagrant/.bashrc
+
+# Adjust LUA_PATH to find the plugin dev setup
+echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
+
+# Assign permissions to "vagrant" user
+sudo chown -R vagrant /usr/local
 
 echo "Successfully Installed Kong version: $KONG_VERSION"

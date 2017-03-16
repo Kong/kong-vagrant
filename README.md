@@ -38,8 +38,9 @@ $ vagrant ssh -c "kong start"
 Kong is now started and is available on the default ports;
 
 - `8000` proxy port
-- `8143` ssl proxy port
+- `8443` ssl proxy port
 - `8001` admin api
+- `8444` ssl admin api
 
 To verify Kong is running successfully, execute the following command (from
 the host machine):
@@ -250,8 +251,9 @@ or if you prefer all repos on the same level:
 The (non-configurable) exposed ports are;
 
 - `8000` proxy port
-- `8143` ssl proxy port
+- `8443` ssl proxy port
 - `8001` admin api
+- `8444` ssl admin api
 
 These are mapped 1-on-1 between the host and guest.
 

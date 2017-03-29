@@ -209,6 +209,12 @@ Eventually, to test Kong familiarize yourself with the
   the same location where the tests run. It is in the Kong tree, excluded from the
   git repo, and accessible from the host to check logs when coding.
 
+### Kong/OpenResty profiling
+
+Vagrant can build the box with [systemtap](https://sourceware.org/systemtap/),
+[stapxx](https://github.com/openresty/stapxx), and [openresty-systemtap-toolkit](https://github.com/openresty/openresty-systemtap-toolkit)
+to aid in profiling Kong. See each project's Readme pages for usage details.
+
 ## Environment variables and configuration
 
 You can alter the behavior of the provision step by setting the following 
@@ -221,6 +227,7 @@ environment variables:
 | `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
+| `KONG_PROFILING` | boolean determining whether or not to build systemtap and friends tools   | undefined |
 
 Use them when provisioning, e.g.:
 ```shell

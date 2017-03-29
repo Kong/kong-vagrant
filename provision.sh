@@ -4,6 +4,7 @@ set -o errexit
 
 KONG_VERSION=$1
 CASSANDRA_VERSION=$2
+KONG_PROFILING=$3
 if [ "$CASSANDRA_VERSION" = "2" ]; then
    CASSANDRA_VERSION=2.2.8
 else
@@ -81,8 +82,39 @@ sudo apt-get install -y netcat openssl libpcre3 dnsmasq procps perl
 sudo dpkg -i kong.deb
 rm kong.deb
 
+
+###########################
+# Install profiling tools #
+###########################
+if [ -n "$KONG_PROFILING" ]; then
+  # install systemtap
+  # https://openresty.org/en/build-systemtap.html
+  sudo apt-get install -y build-essential zlib1g-dev elfutils libdw-dev gettext
+  wget -q http://sourceware.org/systemtap/ftp/releases/systemtap-3.0.tar.gz
+  tar -xf systemtap-3.0.tar.gz
+  cd systemtap-3.0/
+  ./configure --prefix=/opt/stap --disable-docs \
+              --disable-publican --disable-refdocs CFLAGS="-g -O2"
+  make
+  sudo make install
+  rm -rf ./systemtap-3.0 systemtap-3.0.tar.gz
+
+  # install stapxx and openresty-systemtap-toolkit
+  pushd /usr/local
+  git clone https://github.com/openresty/stapxx.git
+  git clone https://github.com/openresty/openresty-systemtap-toolkit.git
+
+  # install flamegraph
+  git clone https://github.com/brendangregg/FlameGraph.git
+
+  # install wrk and copy the binary to a location in PATH
+  git clone https://github.com/wg/wrk.git
+  cd wrk && make && sudo cp ./wrk /usr/local/bin/ && cd ..
+  popd
+fi
+
 # Adjust PATH
-export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin
+export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx
 
 # Prepare path to lua libraries
 ln -sfn /usr/local /home/vagrant/.luarocks
@@ -103,7 +135,10 @@ EOL
 #############
 
 # Adjust PATH for future ssh
-echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin" >> /home/vagrant/.bashrc
+echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx" >> /home/vagrant/.bashrc
+
+# do the same for root so we access to profiling tools
+echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx" >> /root/.bashrc
 
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc

@@ -13,6 +13,7 @@ fi
 echo "Installing Kong version: $KONG_VERSION"
 
 # Installing other dependencies
+sudo apt-get update
 sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev
 
 # Assign permissions to "vagrant" user
@@ -50,6 +51,7 @@ EOF
 #################
 # install redis #
 #################
+sudo apt-get update
 sudo apt-get install redis-server
 sudo chown vagrant /var/log/redis/redis-server.log
 
@@ -77,6 +79,7 @@ sudo /etc/init.d/cassandra restart
 ################
 echo Fetching and installing Kong...
 wget -q -O kong.deb https://github.com/Mashape/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
+sudo apt-get update
 sudo apt-get install -y netcat openssl libpcre3 dnsmasq procps perl
 sudo dpkg -i kong.deb
 rm kong.deb

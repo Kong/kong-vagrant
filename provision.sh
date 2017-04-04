@@ -14,7 +14,7 @@ echo "Installing Kong version: $KONG_VERSION"
 
 # Installing other dependencies
 sudo apt-get update
-sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev
+sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev apt-transport-https
 
 # Assign permissions to "vagrant" user
 sudo chown -R vagrant /usr/local

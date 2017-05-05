@@ -63,7 +63,8 @@ You should receive a JSON response:
       ...
     ]
   }
-}```
+}
+```
 
 
 See the environments variables section below for defaults used and how to

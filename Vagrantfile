@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV['KONG_VB_MEM']
     memory = ENV["KONG_VB_MEM"]
   else
-    memory = 1024
+    memory = 2048
   end
 
   if ENV["KONG_VERSION"]
@@ -61,7 +61,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    vb.memory = memory
   end
 
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "ubuntu/trusty64"
 
   if not source == ""
     config.vm.synced_folder source, "/kong"

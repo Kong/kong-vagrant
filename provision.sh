@@ -61,10 +61,10 @@ sudo chown vagrant /var/log/redis/redis-server.log
 # Install java runtime (Cassandra dependency)
 echo Fetching and installing java...
 sudo mkdir -p /usr/lib/jvm
-sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.tar.gz
+sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jre-8u131-linux-x64.tar.gz
 sudo tar zxvf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
-sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_60/bin/java' 1
-sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_60/bin/java
+sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_131/bin/java' 1
+sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_131/bin/java
 
 # install cassandra
 echo Fetching and installing Cassandra...

@@ -217,7 +217,7 @@ environment variables:
 
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.2`  |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.3`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `1024`    |
 | `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |

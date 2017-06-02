@@ -52,7 +52,7 @@ EOF
 # install redis #
 #################
 sudo apt-get update
-sudo apt-get install redis-server
+sudo apt-get install -y redis-server
 sudo chown vagrant /var/log/redis/redis-server.log
 
 #####################

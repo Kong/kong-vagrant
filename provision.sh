@@ -149,4 +149,9 @@ echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home
 # Assign permissions to "vagrant" user
 sudo chown -R vagrant /usr/local
 
+# install lua dev deps
+pushd /kong
+make dev
+popd
+
 echo "Successfully Installed Kong version: $KONG_VERSION"

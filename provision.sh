@@ -15,7 +15,7 @@ echo "Installing Kong version: $KONG_VERSION"
 
 # Installing other dependencies
 sudo apt-get update
-sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev apt-transport-https
+sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev apt-transport-https language-pack-en
 
 # Assign permissions to "vagrant" user
 sudo chown -R vagrant /usr/local
@@ -145,6 +145,10 @@ echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/
 
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
+
+# Set locale
+echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bashrc
+echo "export LC_CTYPE=en_US.UTF-8" >> /home/vagrant/.bashrc
 
 # Assign permissions to "vagrant" user
 sudo chown -R vagrant /usr/local

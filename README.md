@@ -197,6 +197,25 @@ $ cd /kong
 $ bin/busted /kong-plugin/spec
 ```
 
+To log stuff for debugging during your tests, you need to realize that there
+are generally 2 processes running when testing:
+
+1. Test files executed by `busted` that run your tests
+2. The Kong instance that your tests are running against.
+
+So to debug you can simply use the `print` function. In the former case the
+output will be in your terminal from where you executed the tests. In the
+latter case the output will be in the `error.log` file, but this file is
+cleaned automatically in between tests.
+Because the Kong tests run in the `servroot` prefix inside the Kong repo
+(note that `servroot` does not exist when no tests are running!).
+You can track the log output from the host machine though:
+
+```shell
+# execute from within the Kong repo, before starting your tests
+tail -F servroot/logs/error.log
+```
+
 Eventually, to test Kong familiarize yourself with the
 [Makefile Operations](https://github.com/Mashape/kong#makefile).
 
@@ -206,9 +225,10 @@ Eventually, to test Kong familiarize yourself with the
   Kong, edit your local files (on your host machine), and test your code without
   restarting Kong.
 - `export KONG_LOG_LEVEL=debug` to show detailed logs when coding
-- `export KONG_PREFIX=/kong/servroot` will set the Kong working directory to
+- When just running Kong to play with your plugin, then `export KONG_PREFIX=/kong/servroot`
+  will set the Kong working directory to
   the same location where the tests run. It is in the Kong tree, excluded from the
-  git repo, and accessible from the host to check logs when coding.
+  git repo, and accessible from the host to check logs.
 
 ### Kong/OpenResty profiling
 

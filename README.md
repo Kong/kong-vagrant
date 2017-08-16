@@ -29,10 +29,10 @@ $ vagrant up
 
 # start Kong, by ssh into the vm
 $ vagrant ssh
-$ kong start
+$ kong start --run-migrations
 
 # alternatively use ssh -c option to start Kong
-$ vagrant ssh -c "kong start"
+$ vagrant ssh -c "kong start --run-migrations"
 ```
 
 Kong is now started and is available on the default ports;
@@ -99,7 +99,9 @@ $ make dev
 $ export KONG_CUSTOM_PLUGINS=myPlugin
 
 # startup kong: while inside '/kong' call the start script from the repo!
+# we will also need to ensure that migrations are up to data
 $ cd /kong
+$ bin/kong migrations up
 $ bin/kong start
 ```
 
@@ -154,7 +156,9 @@ $ vagrant ssh
 $ export KONG_CUSTOM_PLUGINS=myPlugin
 
 # startup kong: while inside '/kong' call the start script from the repo!
+# we will also need to ensure that migrations are up to data
 $ cd /kong
+$ bin/kong migrations up
 $ bin/kong start
 ```
 
@@ -243,7 +247,7 @@ environment variables:
 
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.10.3`  |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.11.0`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `2048`    |
 | `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |

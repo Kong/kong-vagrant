@@ -225,9 +225,6 @@ Eventually, to test Kong familiarize yourself with the
 
 ### Development tips and tricks
 
-- `export KONG_LUA_CODE_CACHE=false` turns the code caching off, you can start
-  Kong, edit your local files (on your host machine), and test your code without
-  restarting Kong.
 - `export KONG_LOG_LEVEL=debug` to show detailed logs when coding
 - When just running Kong to play with your plugin, then `export KONG_PREFIX=/kong/servroot`
   will set the Kong working directory to

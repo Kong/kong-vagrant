@@ -286,6 +286,8 @@ The (non-configurable) exposed ports are;
 - `8443` SSL Proxy port
 - `8001` Admin API
 - `8444` SSL Admin API
+- `5432` Postgres database
+- `9042` Cassandra database
 
 These are mapped 1-on-1 between the host and guest.
 

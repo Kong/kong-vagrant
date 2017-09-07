@@ -79,7 +79,17 @@ sudo /etc/init.d/cassandra restart
 # Install Kong #
 ################
 echo Fetching and installing Kong...
+set +o errexit
 wget -q -O kong.deb "https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.trusty.all.deb"
+if [ ! $? -eq 0 ]
+then
+  # 0.10.3 and earlier are on Github
+  echo "failed downloading from BinTray, trying Github..."
+  set -o errexit
+  wget -q -O kong.deb https://github.com/Mashape/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
+fi
+set -o errexit
+
 
 sudo apt-get update
 sudo apt-get install -y netcat openssl libpcre3 dnsmasq procps perl

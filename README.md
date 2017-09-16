@@ -14,6 +14,19 @@ You can use the vagrant box either as an all-in-one Kong installation for
 testing purposes, or you can link it up with source code and start developing
 on Kong or on custom plugins.
 
+# Table of contents
+
+* [Testing Kong](#testing-kong)
+* [Development environment](#development-environment)
+  * [Running Kong from the source repo](#running-kong-from-the-source-repo)
+  * [Testing Kong and custom plugins](#testing-kong-and-custom-plugins)
+  * [Development tips and tricks](#development-tips-and-tricks)
+  * [Kong/OpenResty profiling](#kongopenresty-profiling)
+* [Environment variables and configuration](#environment-variables-and-configuration)
+* [Known issues](#known-issues)
+* [Enterprise support](#enterprise-support)
+
+
 ## Testing Kong
 
 If you just want to give Kong a test ride, and you have Vagrant installed,
@@ -283,13 +296,28 @@ The (non-configurable) exposed ports are;
 - `8443` SSL Proxy port
 - `8001` Admin API
 - `8444` SSL Admin API
-- `5432` Postgres database
-- `9042` Cassandra database
 
 These are mapped 1-on-1 between the host and guest.
 
-## Known Issues
+## Known issues
 
+### worker_connections are not enough error
+
+When running tests these errors occasionally happen. The underlying reason seems
+to be that in the VM the connections are not freed up quickly enough. There
+seem to be 2 workarounds;
+
+- add more memory to the VM. Recreate the vm with:
+```
+KONG_VB_MEM=4096 vagrant up
+```
+ 
+- run the tests by explicitly raising the connection limit, by prefixing the
+ `resty` executable and the new limit `-c 65000`, for example: 
+```
+resty -c 65000 bin/busted -v -o gtest
+```
+ 
 ### Incompatible versions error
 
 When Kong starts it can give errors for incompatible versions. This happens for

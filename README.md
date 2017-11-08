@@ -34,7 +34,7 @@ then you can simply clone this vagrant repo, and build the VM.
 
 ```shell
 # clone this repository
-$ git clone https://github.com/Mashape/kong-vagrant
+$ git clone https://github.com/Kong/kong-vagrant
 $ cd kong-vagrant
 
 # build the machine
@@ -91,14 +91,14 @@ install the development dependencies like the `busted` test framework.
 
 ```shell
 # clone this repository
-$ git clone https://github.com/Mashape/kong-vagrant
+$ git clone https://github.com/Kong/kong-vagrant
 $ cd kong-vagrant
 
 # clone the Kong repo (inside the vagrant one)
-$ git clone https://github.com/Mashape/kong
+$ git clone https://github.com/Kong/kong
 
 # only if you want to develop a custom plugin, also clone the plugin template
-$ git clone https://github.com/Mashape/kong-plugin
+$ git clone https://github.com/Kong/kong-plugin
 
 # build a box with a folder synced to your local Kong and plugin sources
 $ vagrant up
@@ -234,7 +234,7 @@ tail -F servroot/logs/error.log
 ```
 
 Eventually, to test Kong familiarize yourself with the
-[Makefile Operations](https://github.com/Mashape/kong#makefile).
+[Makefile Operations](https://github.com/Kong/kong#makefile).
 
 ### Development tips and tricks
 
@@ -330,12 +330,12 @@ version 0.9.2;
 
 ```shell
 # clone this repository
-$ git clone https://github.com/Mashape/kong-vagrant
+$ git clone https://github.com/Kong/kong-vagrant
 $ cd kong-vagrant/
 
 # clone the Kong repo and switch explicitly to the 0.9.2 version.
 # this will get the proper Kong source code for the version.
-$ git clone https://github.com/Mashape/kong
+$ git clone https://github.com/Kong/kong
 $ cd kong
 $ git checkout 0.9.2
 $ cd ..
@@ -355,7 +355,7 @@ for a solution.
 
 Support, Demo, Training, API Certifications and Consulting available at https://getkong.org/enterprise.
 
-[kong-logo]: http://i.imgur.com/4jyQQAZ.png
+[kong-logo]: https://cl.ly/030V1u02090Q/unnamed.png
 [website-url]: https://getkong.org/
 [website-badge]: https://img.shields.io/badge/GETKong.org-Learn%20More-43bf58.svg
 [documentation-url]: https://getkong.org/docs/

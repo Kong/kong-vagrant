@@ -32,6 +32,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     memory = 2048
   end
 
+  if ENV["KONG_VB_CPUS"]
+    cpus = ENV["KONG_VB_CPUS"]
+  else
+    cpus = 2
+  end
+
   if ENV["KONG_VERSION"]
     version = ENV["KONG_VERSION"]
   else
@@ -65,7 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb|
    vb.name = "vagrant_kong"
    vb.memory = memory
-   vb.cpus = 2
+   vb.cpus = cpus
   end
 
   config.vm.box = "ubuntu/trusty64"

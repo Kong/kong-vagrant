@@ -5,6 +5,7 @@ set -o errexit
 KONG_VERSION=$1
 CASSANDRA_VERSION=$2
 KONG_PROFILING=$3
+ANREPORTS=$4
 if [ "$CASSANDRA_VERSION" = "2" ]; then
    CASSANDRA_VERSION=2.2.8
 else
@@ -153,6 +154,11 @@ echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/
 
 # do the same for root so we access to profiling tools
 echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin" >> /root/.bashrc
+
+# copy host setting
+if [ -n "$ANREPORTS" ]; then
+  echo "export KONG_ANONYMOUS_REPORTS=$ANREPORTS" >> /home/vagrant/.bashrc
+fi
 
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc

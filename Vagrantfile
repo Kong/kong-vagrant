@@ -68,6 +68,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     profiling = ""
   end
 
+  if ENV["KONG_ANONYMOUS_REPORTS"]
+    anreports = ENV["KONG_ANONYMOUS_REPORTS"]
+  else
+    anreports = ""
+  end
+
   config.vm.provider :virtualbox do |vb|
    vb.name = "vagrant_kong"
    vb.memory = memory
@@ -89,5 +95,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8444, host: 8444
 
   config.vm.provision "shell", path: "provision.sh",
-    :args => [version, cversion, profiling]
+    :args => [version, cversion, profiling, anreports]
 end

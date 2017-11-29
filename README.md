@@ -257,7 +257,7 @@ environment variables:
 
 | name            | description                                                               | default   |
 | --------------- | ------------------------------------------------------------------------- | --------- |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.11.1`  |
+| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.11.2`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `2048`    |
 | `KONG_VB_CPUS`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2`       |
 | `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |

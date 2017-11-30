@@ -109,7 +109,7 @@ $ cd /kong
 $ make dev
 
 # only if you want to run the custom plugin, tell Kong to load it
-$ export KONG_CUSTOM_PLUGINS=myPlugin
+$ export KONG_CUSTOM_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call the start script from the repo!
 # we will also need to ensure that migrations are up to data
@@ -129,7 +129,7 @@ command from the host machine:
 $ curl http://localhost:8001
 ```
 In the response you get, the plugins list should now contain an entry
-"myPlugin" to indicate the plugin was loaded.
+"myplugin" to indicate the plugin was loaded.
 
 To start using the plugin, execute from the host:
 ```shell
@@ -145,7 +145,7 @@ $ curl -i -X POST \
 # add the custom plugin, to our new api
 $ curl -i -X POST \
   --url http://localhost:8001/apis/mockbin/plugins/ \
-  --data 'name=myPlugin'
+  --data 'name=myplugin'
 ```
 
 Check whether it is working by making a request from the host:
@@ -166,7 +166,7 @@ specified when building the Vagrant box will lead to unpredictable results.
 $ vagrant ssh
 
 # only if you want to run the custom plugin, tell Kong to load it
-$ export KONG_CUSTOM_PLUGINS=myPlugin
+$ export KONG_CUSTOM_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call the start script from the repo!
 # we will also need to ensure that migrations are up to data

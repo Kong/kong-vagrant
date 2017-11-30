@@ -259,11 +259,13 @@ environment variables:
 | --------------- | ------------------------------------------------------------------------- | --------- |
 | `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.11.2`  |
 | `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `2048`    |
-| `KONG_VB_CPUS`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2`       |
 | `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
 | `KONG_PROFILING` | boolean determining whether or not to build systemtap and friends tools   | undefined |
+| `KONG_NGINX_WORKER_PROCESSES`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2` |
+| `KONG_LOG_LEVEL`  | setting the `KONG_LOG_LEVEL` variable in the virtual machine | none |
+| n.a.  | setting the `KONG_PREFIX` variable in the virtual machine | `/kong/servroot` when the Kong source tree is mounted at `/kong` in the vm. |
 
 Use them when provisioning, e.g.:
 ```shell

@@ -6,6 +6,8 @@ KONG_VERSION=$1
 CASSANDRA_VERSION=$2
 KONG_PROFILING=$3
 ANREPORTS=$4
+LOGLEVEL=$5
+
 if [ "$CASSANDRA_VERSION" = "2" ]; then
    CASSANDRA_VERSION=2.2.8
 else
@@ -87,7 +89,7 @@ then
   # 0.10.3 and earlier are on Github
   echo "failed downloading from BinTray, trying Github..."
   set -o errexit
-  wget -q -O kong.deb https://github.com/Mashape/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
+  wget -q -O kong.deb https://github.com/Kong/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
 fi
 set -o errexit
 
@@ -155,9 +157,17 @@ echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/
 # do the same for root so we access to profiling tools
 echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin" >> /root/.bashrc
 
-# copy host setting
+# copy host settings
+if [ -n "$LOGLEVEL" ]; then
+  echo "export KONG_LOG_LEVEL=$LOGLEVEL" >> /home/vagrant/.bashrc
+fi
 if [ -n "$ANREPORTS" ]; then
   echo "export KONG_ANONYMOUS_REPORTS=$ANREPORTS" >> /home/vagrant/.bashrc
+fi
+
+# set prefix (working directory) to the source tree if available (same as Kong test suite)
+if [ -d "/kong" ]; then
+  echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bashrc
 fi
 
 # Adjust LUA_PATH to find the plugin dev setup

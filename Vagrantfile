@@ -32,8 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     memory = 2048
   end
 
-  if ENV["KONG_VB_CPUS"]
-    cpus = ENV["KONG_VB_CPUS"]
+  if ENV["KONG_NGINX_WORKER_PROCESSES"]
+    cpus = ENV["KONG_NGINX_WORKER_PROCESSES"]
   else
     cpus = 2
   end
@@ -74,6 +74,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     anreports = ""
   end
 
+  if ENV["KONG_LOG_LEVEL"]
+    loglevel = ENV["KONG_LOG_LEVEL"]
+  else
+    loglevel = ""
+  end
+
   config.vm.provider :virtualbox do |vb|
    vb.name = "vagrant_kong"
    vb.memory = memory
@@ -95,5 +101,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8444, host: 8444
 
   config.vm.provision "shell", path: "provision.sh",
-    :args => [version, cversion, profiling, anreports]
+    :args => [version, cversion, profiling, anreports, loglevel]
 end

@@ -176,6 +176,9 @@ echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home
 # Set locale
 echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bashrc
 echo "export LC_CTYPE=en_US.UTF-8" >> /home/vagrant/.bashrc
+# fix locale warning
+sudo echo "LC_CTYPE=\"en_US.UTF-8\"" >> /etc/default/locale
+sudo echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
 
 # Assign permissions to "vagrant" user
 sudo chown -R vagrant /usr/local

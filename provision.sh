@@ -170,6 +170,10 @@ if [ -d "/kong" ]; then
   echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bashrc
 fi
 
+# set admin listen addresses
+echo "export KONG_ADMIN_LISTEN=0.0.0.0:8001" >> /home/vagrant/.bashrc
+echo "export KONG_ADMIN_LISTEN_SSL=0.0.0.0:8444" >> /home/vagrant/.bashrc
+
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
 

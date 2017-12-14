@@ -239,6 +239,26 @@ tail -F servroot/logs/error.log
 Eventually, to test Kong familiarize yourself with the
 [Makefile Operations](https://github.com/Kong/kong#makefile).
 
+## Log files
+
+Inside the virtual machine, the Kong prefix (working directory) will be set to
+`/kong/servroot`.
+
+You can track the log files (from the host) like this for example:
+
+```shell
+vagrant ssh -c "tail -F /kong/servroot/logs/error.log"
+```
+
+If you have the Kong source tree available, then `/kong` will be mounted
+from the host and the prefix will be on the host in `<kong-repo>/servroot` (the
+same location where the tests will also run).
+In this case you can track the log files directly on the host like this for example:
+
+```shell
+tail -F <kong-repo>/servroot/logs/error.log"
+```
+
 ### Development tips and tricks
 
 - `export KONG_LOG_LEVEL=debug` to show detailed logs when coding
@@ -268,7 +288,6 @@ environment variables:
 | `KONG_PROFILING` | boolean determining whether or not to build systemtap and friends tools   | undefined |
 | `KONG_NGINX_WORKER_PROCESSES`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2` |
 | `KONG_LOG_LEVEL`  | setting the `KONG_LOG_LEVEL` variable in the virtual machine | none |
-| n.a.  | setting the `KONG_PREFIX` variable in the virtual machine | `/kong/servroot` when the Kong source tree is mounted at `/kong` in the vm. |
 
 Use them when provisioning, e.g.:
 ```shell

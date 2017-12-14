@@ -165,10 +165,12 @@ if [ -n "$ANREPORTS" ]; then
   echo "export KONG_ANONYMOUS_REPORTS=$ANREPORTS" >> /home/vagrant/.bashrc
 fi
 
-# set prefix (working directory) to the source tree if available (same as Kong test suite)
-if [ -d "/kong" ]; then
-  echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bashrc
+# create prefix (working directory) to the same location as source tree if available
+if [ ! -d "/kong" ]; then
+  sudo mkdir /kong
+  sudo chown -R vagrant /kong
 fi
+echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bashrc
 
 # set admin listen addresses
 echo "export KONG_ADMIN_LISTEN=0.0.0.0:8001" >> /home/vagrant/.bashrc

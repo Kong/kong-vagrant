@@ -26,6 +26,9 @@ on Kong or on custom plugins.
 * [Known issues](#known-issues)
 * [Enterprise support](#enterprise-support)
 
+**IMPORTANT**: The Kong admin api is by default only available on localhost,
+but to be able to access it from the host system, the Vagrant box will listen
+on all interfaces by default. This might be a security risk in your environment.
 
 ## Testing Kong
 

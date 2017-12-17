@@ -83,8 +83,8 @@ You should receive a JSON response:
 ```
 
 
-See the environments variables section below for defaults used and how to
-modify the settings of the Vagrant machine.
+See the [environment variables section](#environment-variables-and-configuration)
+below for defaults used and how to modify the settings of the Vagrant machine.
 
 ## Development environment
 
@@ -114,8 +114,8 @@ $ make dev
 # only if you want to run the custom plugin, tell Kong to load it
 $ export KONG_CUSTOM_PLUGINS=myplugin
 
-# startup kong: while inside '/kong' call the start script from the repo!
-# we will also need to ensure that migrations are up to data
+# startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
+# we will also need to ensure that migrations are up to date
 $ cd /kong
 $ bin/kong migrations up
 $ bin/kong start
@@ -171,8 +171,8 @@ $ vagrant ssh
 # only if you want to run the custom plugin, tell Kong to load it
 $ export KONG_CUSTOM_PLUGINS=myplugin
 
-# startup kong: while inside '/kong' call the start script from the repo!
-# we will also need to ensure that migrations are up to data
+# startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
+# we will also need to ensure that migrations are up to date
 $ cd /kong
 $ bin/kong migrations up
 $ bin/kong start
@@ -194,7 +194,7 @@ machine.
 # ssh into the Vagrant machine
 $ vagrant ssh
 
-# testing: while inside '/kong' call `busted` from the repo!
+# testing: while inside '/kong' call `busted` from the repo as `bin/busted`!
 $ cd /kong
 $ bin/busted
 
@@ -211,8 +211,8 @@ To test the plugin specific tests:
 # ssh into the Vagrant machine
 $ vagrant ssh
 
-# testing: while inside '/kong' call `busted` from the repo, but specify
-# the plugin testsuite to be executed
+# testing: while inside '/kong' call `busted` from the repo as `bin/busted`,
+# but specify the plugin testsuite to be executed
 $ cd /kong
 $ bin/busted /kong-plugin/spec
 ```
@@ -228,16 +228,7 @@ output will be in your terminal from where you executed the tests. In the
 latter case the output will be in the `error.log` file, but this file is
 cleaned automatically in between tests.
 Because the Kong tests run in the `servroot` prefix inside the Kong repo
-(note that `servroot` does not exist when no tests are running!).
-You can track the log output from the host machine though:
-
-```shell
-# execute from within the Kong repo, before starting your tests
-tail -F servroot/logs/error.log
-```
-
-Eventually, to test Kong familiarize yourself with the
-[Makefile Operations](https://github.com/Kong/kong#makefile).
+you can track them using a `tail` command, see [Log files](#log-files).
 
 ## Log files
 
@@ -261,17 +252,24 @@ tail -F <kong-repo>/servroot/logs/error.log"
 
 ### Development tips and tricks
 
-- `export KONG_LOG_LEVEL=debug` to show detailed logs when coding
-- When just running Kong to play with your plugin, then `export KONG_PREFIX=/kong/servroot`
-  will set the Kong working directory to
-  the same location where the tests run. It is in the Kong tree, excluded from the
-  git repo, and accessible from the host to check logs.
+- Add `export KONG_LOG_LEVEL=debug` to your bash profile on the host so it will be
+  automatically set whenever you rebuild the VM (applies to other environment
+  variables as well)
+- To run individual tests use the `--tags` switch in busted. Define a test with a tag;
+  ```lua
+  it("will test something #only", function()
+    -- test here
+  end
+  ```
+  Then execute the test with `bin/busted --tags=only`
+- Some snippets for debug statements on [Kong nation](https://discuss.konghq.com/t/best-practices-for-kong-debugging-example/182/3).
 
 ### Kong/OpenResty profiling
 
 Vagrant can build the box with [systemtap](https://sourceware.org/systemtap/),
 [stapxx](https://github.com/openresty/stapxx), and [openresty-systemtap-toolkit](https://github.com/openresty/openresty-systemtap-toolkit)
 to aid in profiling Kong. See each project's Readme pages for usage details.
+To enable those tools use `KONG_PROFILING=true` when building the VM.
 
 ## Environment variables and configuration
 

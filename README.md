@@ -273,6 +273,14 @@ To enable those tools use `KONG_PROFILING=true` when building the VM.
 
 ## Environment variables and configuration
 
+These environment variables are copied from the Host system into the virtual
+machine upon provisioning:
+
+| name            | description                                                                           |
+| --------------- | ------------------------------------------------------------------------------------- |
+| `KONG_LOG_LEVEL`  | setting the `KONG_LOG_LEVEL` variable in the virtual machine |
+| `HTTP_PROXY` & `HTTPS_PROXY` | Proxy settings to be able to properly build the machine when using a proxy |
+
 You can alter the behavior of the provision step by setting the following
 environment variables:
 
@@ -285,7 +293,6 @@ environment variables:
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
 | `KONG_PROFILING` | boolean determining whether or not to build systemtap and friends tools   | undefined |
 | `KONG_NGINX_WORKER_PROCESSES`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2` |
-| `KONG_LOG_LEVEL`  | setting the `KONG_LOG_LEVEL` variable in the virtual machine | none |
 
 Use them when provisioning, e.g.:
 ```shell

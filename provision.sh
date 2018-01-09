@@ -14,6 +14,29 @@ else
    CASSANDRA_VERSION=3.0.9
 fi
 
+if [ -n "$HTTP_PROXY" -o -n "$HTTPS_PROXY" ]; then
+  touch /etc/profile.d/proxy.sh
+  touch /etc/apt/apt.conf.d/50proxy
+fi
+
+if [ -n "$HTTP_PROXY" ]; then
+  printf "using http proxy: %s\n" $HTTP_PROXY
+
+  echo "http_proxy=$HTTP_PROXY" >> /etc/profile.d/proxy.sh
+  echo "HTTP_PROXY=$HTTP_PROXY" >> /etc/profile.d/proxy.sh
+  echo "Acquire::http::proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf.d/50proxy
+  echo "http_proxy=$HTTP_PROXY" >> /etc/wgetrc
+fi
+
+if [ -n "$HTTPS_PROXY" ]; then
+  printf "using https proxy: %s\n" $HTTPS_PROXY
+
+  echo "https_proxy=$HTTPS_PROXY" >> /etc/profile.d/proxy.sh
+  echo "HTTPS_PROXY=$HTTPS_PROXY" >> /etc/profile.d/proxy.sh
+  echo "Acquire::https::proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf.d/50proxy
+  echo "https_proxy=$HTTPS_PROXY" >> /etc/wgetrc
+fi
+
 echo "Installing Kong version: $KONG_VERSION"
 
 # Installing other dependencies

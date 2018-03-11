@@ -4,7 +4,7 @@ set -o errexit
 
 KONG_VERSION=$1
 CASSANDRA_VERSION=$2
-KONG_PROFILING=$3
+KONG_UTILITIES=$3
 ANREPORTS=$4
 LOGLEVEL=$5
 
@@ -126,7 +126,10 @@ rm kong.deb
 ###########################
 # Install profiling tools #
 ###########################
-if [ -n "$KONG_PROFILING" ]; then
+if [ -n "$KONG_UTILITIES" ]; then
+  # install tools
+  sudo apt-get install -y httpie jq
+
   # install systemtap
   # https://openresty.org/en/build-systemtap.html
   sudo apt-get install -y build-essential zlib1g-dev elfutils libdw-dev gettext

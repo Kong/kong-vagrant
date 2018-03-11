@@ -62,10 +62,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  if ENV["KONG_PROFILING"]
-    profiling = "1"
+  if ENV["KONG_UTILITIES"]
+    utils = "1"
   else
-    profiling = ""
+    utils = ""
   end
 
   if ENV["KONG_ANONYMOUS_REPORTS"]
@@ -102,5 +102,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "shell", path: "provision.sh",
      env: { "HTTP_PROXY": ENV["HTTP_PROXY"], "HTTPS_PROXY": ENV["HTTPS_PROXY"]},
-    :args => [version, cversion, profiling, anreports, loglevel]
+    :args => [version, cversion, utils, anreports, loglevel]
 end

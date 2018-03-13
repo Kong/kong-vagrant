@@ -21,7 +21,7 @@ on Kong or on custom plugins.
   * [Running Kong from the source repo](#running-kong-from-the-source-repo)
   * [Testing Kong and custom plugins](#testing-kong-and-custom-plugins)
   * [Development tips and tricks](#development-tips-and-tricks)
-  * [Kong/OpenResty profiling](#kongopenresty-profiling)
+  * [Utilities and profiling](#utilities-and-profiling)
 * [Environment variables and configuration](#environment-variables-and-configuration)
 * [Known issues](#known-issues)
 * [Enterprise support](#enterprise-support)
@@ -264,17 +264,23 @@ tail -F <kong-repo>/servroot/logs/error.log"
   Then execute the test with `bin/busted --tags=only`
 - Some snippets for debug statements on [Kong nation](https://discuss.konghq.com/t/best-practices-for-kong-debugging-example/182/3).
 
-### Kong/OpenResty profiling
+### Utilities and profiling
 
-Vagrant can build the box with [systemtap](https://sourceware.org/systemtap/),
-[stapxx](https://github.com/openresty/stapxx), and [openresty-systemtap-toolkit](https://github.com/openresty/openresty-systemtap-toolkit)
-to aid in profiling Kong. See each project's Readme pages for usage details.
-To enable those tools use `KONG_PROFILING=true` when building the VM.
+Vagrant can build the box with a set of additional utilities if requested:
+
+- [httpie](https://httpie.org/)
+- [jq](https://stedolan.github.io/jq/)
+- Profiling tools (see tools pages for usage details):
+  - [systemtap](https://sourceware.org/systemtap/)
+  - [stapxx](https://github.com/openresty/stapxx)
+  - [openresty-systemtap-toolkit](https://github.com/openresty/openresty-systemtap-toolkit)
+
+To enable those tools use `KONG_UTILITIES=true` when building the VM.
 
 ## Environment variables and configuration
 
-These environment variables are copied from the Host system into the virtual
-machine upon provisioning:
+The following environment variables will be copied from the Host system into
+the virtual machine upon provisioning:
 
 | name            | description                                                                           |
 | --------------- | ------------------------------------------------------------------------------------- |
@@ -291,15 +297,15 @@ environment variables:
 | `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
 | `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |
 | `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
-| `KONG_PROFILING` | boolean determining whether or not to build systemtap and friends tools   | undefined |
+| `KONG_UTILITIES` | boolean determining whether or not to add the [additional utilities](#utilities-and-profiling) | undefined |
 | `KONG_NGINX_WORKER_PROCESSES`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2` |
 
 Use them when provisioning, e.g.:
 ```shell
-$ KONG_VERSION=0.9.5 vagrant up
+$ KONG_VERSION=0.12.1 vagrant up
 ```
 
-The `_PATH` variables are will take the value set, or the defaults, but the
+The `xxx_PATH` variables will take the value set, or the defaults, but the
 defaults will only be taken if they actually exist. As such the defaults allow
 for 2 file structures, without any configuration.
 

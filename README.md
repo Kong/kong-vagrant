@@ -282,23 +282,23 @@ To enable those tools use `KONG_UTILITIES=true` when building the VM.
 The following environment variables will be copied from the Host system into
 the virtual machine upon provisioning:
 
-| name            | description                                                                           |
-| --------------- | ------------------------------------------------------------------------------------- |
-| `KONG_LOG_LEVEL`  | setting the `KONG_LOG_LEVEL` variable in the virtual machine |
+| name                         | description                                                                |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| `KONG_LOG_LEVEL`             | setting the `KONG_LOG_LEVEL` variable in the virtual machine               |
 | `HTTP_PROXY` & `HTTPS_PROXY` | Proxy settings to be able to properly build the machine when using a proxy |
 
 You can alter the behavior of the provision step by setting the following
 environment variables:
 
-| name            | description                                                               | default   |
-| --------------- | ------------------------------------------------------------------------- | --------- |
-| `KONG_VERSION`  | the Kong version number to download and install at the provision step     | `0.12.3`  |
-| `KONG_VB_MEM`   | virtual machine memory (RAM) size *(in MB)*                               | `4096`    |
-| `KONG_CASSANDRA`| the major Cassandra version to use, either `2` or `3`                     | `3`, or `2` for Kong versions `9.x` and older |
-| `KONG_PATH`     | the path to mount your local Kong source under the guest's `/kong` folder | `./kong`, `../kong`, or nothing. In this order. |
-| `KONG_PLUGIN_PATH` | the path to mount your local plugin source under the guest's `/kong-plugin` folder | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
-| `KONG_UTILITIES` | boolean determining whether or not to add the [additional utilities](#utilities-and-profiling) | undefined |
-| `KONG_NGINX_WORKER_PROCESSES`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers) | `2` |
+| name                           | description                                                                                    | default                                                       |
+| ------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `KONG_VERSION`                 | the Kong version number to download and install at the provision step                          | `0.13.0`                                                      |
+| `KONG_VB_MEM`                  | virtual machine memory (RAM) size *(in MB)*                                                    | `4096`                                                        |
+| `KONG_CASSANDRA`               | the major Cassandra version to use, either `2` or `3`                                          | `3`, or `2` for Kong versions `9.x` and older                 |
+| `KONG_PATH`                    | the path to mount your local Kong source under the guest's `/kong` folder                      | `./kong`, `../kong`, or nothing. In this order.               |
+| `KONG_PLUGIN_PATH`             | the path to mount your local plugin source under the guest's `/kong-plugin` folder             | `./kong-plugin`, `../kong-plugin`, or nothing. In this order. |
+| `KONG_UTILITIES`               | boolean determining whether or not to add the [additional utilities](#utilities-and-profiling) | `undefined`                                                   |
+| `KONG_NGINX_WORKER_PROCESSES`  | the number of CPUs available to the virtual machine (relates to the number of nginx workers)   | `2`                                                           |
 
 Use them when provisioning, e.g.:
 ```shell

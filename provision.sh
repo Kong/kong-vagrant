@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./semver.sh
+
 set -o errexit
 
 KONG_VERSION=$1
@@ -54,7 +56,7 @@ sudo chown -R vagrant /usr/local
 sudo apt-get update
 sudo apt-get install -y software-properties-common python-software-properties
 sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ precise-pgdg main"
-wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - 
+wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install -y postgresql-9.5
 
@@ -70,7 +72,7 @@ sudo /etc/init.d/postgresql restart
 # Create PG user and database
 psql -U postgres <<EOF
 \x
-CREATE USER kong; 
+CREATE USER kong;
 CREATE DATABASE kong OWNER kong;
 CREATE DATABASE kong_tests OWNER kong;
 EOF
@@ -118,7 +120,21 @@ set -o errexit
 
 
 sudo apt-get update
-sudo apt-get install -y netcat openssl libpcre3 dnsmasq procps perl
+sudo apt-get install -y netcat libpcre3 dnsmasq procps perl
+
+if [ semverEQ "$KONG_VERSION" "0.14.0" -o semverGT "$KONG_VERSION" "0.14.0" ]; then
+  wget https://www.openssl.org/source/openssl-1.1.0h.tar.gz
+  tar xzvf openssl-1.1.0h.tar.gz
+  cd openssl-1.1.0h
+  ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)'
+  make
+  sudo make install
+  cd ..
+else
+  sudo apt-get install -y openssl
+fi
+
+
 sudo dpkg -i kong.deb
 rm kong.deb
 

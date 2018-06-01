@@ -292,7 +292,7 @@ environment variables:
 
 | name                           | description                                                                                    | default                                                       |
 | ------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `KONG_VERSION`                 | the Kong version number to download and install at the provision step                          | `0.13.1`                                                      |
+| `KONG_VERSION`                 | the Kong version number to download and install at the provision step                          | `0.14.0`                                                      |
 | `KONG_VB_MEM`                  | virtual machine memory (RAM) size *(in MB)*                                                    | `4096`                                                        |
 | `KONG_CASSANDRA`               | the major Cassandra version to use, either `2` or `3`                                          | `3`, or `2` for Kong versions `9.x` and older                 |
 | `KONG_PATH`                    | the path to mount your local Kong source under the guest's `/kong` folder                      | `./kong`, `../kong`, or nothing. In this order.               |
@@ -347,13 +347,13 @@ seem to be 2 workarounds;
 ```
 KONG_VB_MEM=4096 vagrant up
 ```
- 
+
 - run the tests by explicitly raising the connection limit, by prefixing the
- `resty` executable and the new limit `-c 65000`, for example: 
+ `resty` executable and the new limit `-c 65000`, for example:
 ```
 resty -c 65000 bin/busted -v -o gtest
 ```
- 
+
 ### Incompatible versions error
 
 When Kong starts it can give errors for incompatible versions. This happens for

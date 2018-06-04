@@ -2,17 +2,55 @@
 
 set -o errexit
 
+# parse/set up input parameters
+
 KONG_VERSION=$1
 CASSANDRA_VERSION=$2
 KONG_UTILITIES=$3
 ANREPORTS=$4
 LOGLEVEL=$5
 
+VERSION_RE='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+KONG_MAJOR=$(echo $1 | sed -e "s#$VERSION_RE#\1#")
+KONG_MINOR=$(echo $1 | sed -e "s#$VERSION_RE#\2#")
+KONG_PATCH=$(echo $1 | sed -e "s#$VERSION_RE#\3#")
+let "KONG_NUM_VERSION = KONG_MAJOR * 10000 + KONG_MINOR * 100 + KONG_PATCH"
+
+echo "*************************************************************************"
+echo "Installing Kong version: $KONG_VERSION"
+echo "*************************************************************************"
+
+
 if [ "$CASSANDRA_VERSION" = "2" ]; then
    CASSANDRA_VERSION=2.2.8
 else
    CASSANDRA_VERSION=3.0.9
 fi
+
+
+#Set some version dependent options
+
+KONG_DOWNLOAD_URL="https://github.com/Kong/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb"
+KONG_ADMIN_LISTEN="0.0.0.0:8001"
+KONG_ADMIN_LISTEN_SSL="0.0.0.0:8444"
+
+if [ $KONG_NUM_VERSION -gt 001003 ]; then
+  #Kong 0.10.4 and later are on Bintray
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.trusty.all.deb"
+fi
+
+if [ $KONG_NUM_VERSION -ge 001300 ]; then
+  #Kong 0.13.0 listen directives format changed, now combined
+  KONG_ADMIN_LISTEN="0.0.0.0:8001, 0.0.0.0:8444 ssl"
+  unset KONG_ADMIN_LISTEN_SSL
+fi
+
+
+
+# set up the environment
+
+# Assign permissions to "vagrant" user
+sudo chown -R vagrant /usr/local
 
 if [ -n "$HTTP_PROXY" -o -n "$HTTPS_PROXY" ]; then
   touch /etc/profile.d/proxy.sh
@@ -37,25 +75,39 @@ if [ -n "$HTTPS_PROXY" ]; then
   echo "https_proxy=$HTTPS_PROXY" >> /etc/wgetrc
 fi
 
-echo "Installing Kong version: $KONG_VERSION"
 
-# Installing other dependencies
-sudo apt-get update
-sudo apt-get install -y git curl make pkg-config unzip libpcre3-dev apt-transport-https language-pack-en libssl-dev
+echo "*************************************************************************"
+echo Setting up APT repositories
+echo "*************************************************************************"
 
-# Assign permissions to "vagrant" user
-sudo chown -R vagrant /usr/local
-
-
-####################
-# Install Postgres #
-####################
-# Install Postgres
-sudo apt-get update
-sudo apt-get install -y software-properties-common python-software-properties
+#postgres
 sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ precise-pgdg main"
 wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+#cassandra
+echo 'deb http://debian.datastax.com/community stable main' | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | sudo apt-key add -
+
+
 sudo apt-get update
+
+echo "*************************************************************************"
+echo Installing APT packages
+echo "*************************************************************************"
+
+
+#generic usability utilities
+sudo apt-get install -y httpie jq
+
+#Installing required dependencies
+sudo apt-get install -y git curl make pkg-config unzip apt-transport-https language-pack-en
+
+
+####################
+echo "*************************************************************************"
+echo Installing and configuring Postgres
+echo "*************************************************************************"
+
 sudo apt-get install -y postgresql-9.5
 
 # Configure Postgres
@@ -76,49 +128,43 @@ CREATE DATABASE kong_tests OWNER kong;
 EOF
 
 #################
-# install redis #
-#################
-sudo apt-get update
+echo "*************************************************************************"
+echo Installing Redis
+echo "*************************************************************************"
+
 sudo apt-get install -y redis-server
 sudo chown vagrant /var/log/redis/redis-server.log
 
 #####################
-# install Cassandra #
-######################
-# Install java runtime (Cassandra dependency)
+echo "*************************************************************************"
+echo Installing Cassandra and java
+echo "*************************************************************************"
+
+#Install java runtime (Cassandra dependency)
 echo Fetching and installing java...
 sudo mkdir -p /usr/lib/jvm
 sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jre-8u131-linux-x64.tar.gz
-sudo tar zxvf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
+sudo tar zxf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
 sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_131/bin/java' 1
 sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_131/bin/java
 
 # install cassandra
 echo Fetching and installing Cassandra...
-echo 'deb http://debian.datastax.com/community stable main' | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
-wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | sudo apt-key add -
-sudo apt-get update
 sudo apt-get install cassandra=$CASSANDRA_VERSION -y --force-yes
 sudo /etc/init.d/cassandra restart
 
 ################
-# Install Kong #
-################
+echo "*************************************************************************"
 echo Fetching and installing Kong...
-set +o errexit
-wget -q -O kong.deb "https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.trusty.all.deb"
-if [ ! $? -eq 0 ]
-then
-  # 0.10.3 and earlier are on Github
-  echo "failed downloading from BinTray, trying Github..."
-  set -o errexit
-  wget -q -O kong.deb https://github.com/Kong/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb
+echo "*************************************************************************"
+
+wget -q -O kong.deb "$KONG_DOWNLOAD_URL"
+
+if [ $KONG_NUM_VERSION -lt 1000 ]; then
+  #dnsmasq for Kong 0.9.x and earlier
+  sudo apt-get install -y dnsmasq
 fi
-set -o errexit
 
-
-sudo apt-get update
-sudo apt-get install -y dnsmasq
 sudo dpkg -i kong.deb
 rm kong.deb
 
@@ -128,7 +174,9 @@ rm kong.deb
 ###########################
 if [ -n "$KONG_UTILITIES" ]; then
   # install tools
-  sudo apt-get install -y httpie jq
+  echo "*************************************************************************"
+  echo Installing systemtap, stapxx and openresty-systemtap-toolkit
+  echo "*************************************************************************"
 
   # install systemtap
   # https://openresty.org/en/build-systemtap.html
@@ -156,6 +204,11 @@ if [ -n "$KONG_UTILITIES" ]; then
   popd
 fi
 
+
+echo "*************************************************************************"
+echo Update localization, paths, ulimit, etc
+echo "*************************************************************************"
+
 # Adjust PATH
 export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx
 
@@ -172,10 +225,6 @@ sudo bash -c "cat >> /etc/security/limits.conf" << EOL
 * hard     nofile         65535
 EOL
 
-
-#############
-# Finish... #
-#############
 
 # Adjust PATH for future ssh
 echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin" >> /home/vagrant/.bashrc
@@ -199,8 +248,10 @@ fi
 echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bashrc
 
 # set admin listen addresses
-echo "export KONG_ADMIN_LISTEN=0.0.0.0:8001" >> /home/vagrant/.bashrc
-echo "export KONG_ADMIN_LISTEN_SSL=0.0.0.0:8444" >> /home/vagrant/.bashrc
+echo "export KONG_ADMIN_LISTEN=\"$KONG_ADMIN_LISTEN\"" >> /home/vagrant/.bashrc
+if [ -n "$KONG_ADMIN_LISTEN_SSL" ]; then
+  echo "export KONG_ADMIN_LISTEN_SSL=$KONG_ADMIN_LISTEN_SSL" >> /home/vagrant/.bashrc
+fi
 
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
@@ -215,4 +266,5 @@ sudo echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
 # Assign permissions to "vagrant" user
 sudo chown -R vagrant /usr/local
 
+echo .
 echo "Successfully Installed Kong version: $KONG_VERSION"

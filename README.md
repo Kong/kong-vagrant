@@ -263,13 +263,15 @@ tail -F <kong-repo>/servroot/logs/error.log"
   ```
   Then execute the test with `bin/busted --tags=only`
 - Some snippets for debug statements on [Kong nation](https://discuss.konghq.com/t/best-practices-for-kong-debugging-example/182/3).
+- The VM will have some additional helpful utilities installed:
+
+  - [httpie](https://httpie.org/)
+  - [jq](https://stedolan.github.io/jq/)
 
 ### Utilities and profiling
 
 Vagrant can build the box with a set of additional utilities if requested:
 
-- [httpie](https://httpie.org/)
-- [jq](https://stedolan.github.io/jq/)
 - Profiling tools (see tools pages for usage details):
   - [systemtap](https://sourceware.org/systemtap/)
   - [stapxx](https://github.com/openresty/stapxx)
@@ -347,13 +349,13 @@ seem to be 2 workarounds;
 ```
 KONG_VB_MEM=4096 vagrant up
 ```
- 
+
 - run the tests by explicitly raising the connection limit, by prefixing the
- `resty` executable and the new limit `-c 65000`, for example: 
+ `resty` executable and the new limit `-c 65000`, for example:
 ```
 resty -c 65000 bin/busted -v -o gtest
 ```
- 
+
 ### Incompatible versions error
 
 When Kong starts it can give errors for incompatible versions. This happens for

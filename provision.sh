@@ -230,6 +230,12 @@ echo "*************************************************************************"
 echo Update localization, paths, ulimit, etc
 echo "*************************************************************************"
 
+# Aliases
+echo 'alias ks="kong start -c kong.conf.default"' >> /home/vagrant/.bashrc
+echo 'alias kmu="kong migrations up -c kong.conf.default"' >> /home/vagrant/.bashrc
+echo 'alias kmr="kong migrations reset -c kong.conf.default"' >> /home/vagrant/.bashrc
+echo 'alias kss="kong stop ; ks"' >> /home/vagrant/.bashrc
+
 # Adjust PATH
 export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx
 

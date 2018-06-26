@@ -31,6 +31,7 @@ else
    CASSANDRA_VERSION=3.0.9
 fi
 
+POSTGRES_VERSION=9.5
 
 #Set some version dependent options
 
@@ -114,15 +115,17 @@ echo Installing and configuring Postgres
 echo "*************************************************************************"
 
 set +o errexit
-dpkg --list postgresql-9.5 > /dev/null 2>&1
+dpkg --list postgresql-$POSTGRES_VERSION > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-sudo apt-get install -y postgresql-9.5
+sudo apt-get install -y postgresql-$POSTGRES_VERSION
 
 # Configure Postgres
-sudo bash -c "cat > /etc/postgresql/9.5/main/pg_hba.conf" << EOL
+sudo sed -i "s/#listen_address.*/listen_addresses '*'/" /etc/postgresql/$POSTGRES_VERSION/main/postgresql.conf
+sudo bash -c "cat > /etc/postgresql/$POSTGRES_VERSION/main/pg_hba.conf" << EOL
 local   all             all                                     trust
 host    all             all             127.0.0.1/32            trust
 host    all             all             ::1/128                 trust
+host    all             all             0.0.0.0/0               trust
 EOL
 
 sudo /etc/init.d/postgresql restart

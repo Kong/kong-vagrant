@@ -100,6 +100,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8001, host: 8001
   config.vm.network :forwarded_port, guest: 8443, host: 8443
   config.vm.network :forwarded_port, guest: 8444, host: 8444
+  config.vm.network :forwarded_port, guest: 5432, host: 65432
 
   config.vm.provision "shell", path: "provision.sh",
      env: { "HTTP_PROXY": ENV["HTTP_PROXY"], "HTTPS_PROXY": ENV["HTTPS_PROXY"]},

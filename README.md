@@ -334,6 +334,7 @@ The (non-configurable) exposed ports are;
 - `8443` SSL Proxy port
 - `8001` Admin API
 - `8444` SSL Admin API
+- `65432` Postgres datastore
 
 These are mapped 1-on-1 between the host and guest.
 

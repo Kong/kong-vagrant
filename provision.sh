@@ -282,6 +282,7 @@ fi
 
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
+echo "if [ \$((1 + RANDOM % 20)) -eq 1 ]; then kong roar; fi" >> /home/vagrant/.bashrc
 
 # Set locale
 echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bashrc

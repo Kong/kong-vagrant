@@ -2,6 +2,10 @@
 
 set -o errexit
 
+#Stop the STDin warnings
+export DEBIAN_FRONTEND=noninteractive
+
+
 # parse/set up input parameters
 
 KONG_VERSION=$1
@@ -85,9 +89,10 @@ sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ precise-p
 wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
 #cassandra
-echo 'deb http://debian.datastax.com/community stable main' | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
-wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | sudo apt-key add -
-
+if [ ! -f /etc/apt/sources.list.d/cassandra.sources.list ]; then
+  echo 'deb http://debian.datastax.com/community stable main' | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+  wget -q -O - '$@' http://debian.datastax.com/debian/repo_key | sudo apt-key add -
+fi
 
 sudo apt-get update
 
@@ -108,6 +113,9 @@ echo "*************************************************************************"
 echo Installing and configuring Postgres
 echo "*************************************************************************"
 
+set +o errexit
+dpkg --list postgresql-9.5 > /dev/null 2>&1
+if [ $? -ne 0 ]; then
 sudo apt-get install -y postgresql-9.5
 
 # Configure Postgres
@@ -127,6 +135,9 @@ CREATE DATABASE kong OWNER kong;
 CREATE DATABASE kong_tests OWNER kong;
 EOF
 
+fi
+set -o errexit
+
 #################
 echo "*************************************************************************"
 echo Installing Redis
@@ -141,18 +152,25 @@ echo Installing Cassandra and java
 echo "*************************************************************************"
 
 #Install java runtime (Cassandra dependency)
-echo Fetching and installing java...
-sudo mkdir -p /usr/lib/jvm
-sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jre-8u131-linux-x64.tar.gz
-sudo tar zxf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
-sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_131/bin/java' 1
-sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_131/bin/java
+set +o errexit
+java -version  > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo Fetching and installing java...
+  sudo mkdir -p /usr/lib/jvm
+  sudo wget -q -O /tmp/jre-linux-x64.tar.gz --no-cookies --no-check-certificate --header 'Cookie: oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jre-8u131-linux-x64.tar.gz
+  sudo tar zxf /tmp/jre-linux-x64.tar.gz -C /usr/lib/jvm
+  sudo update-alternatives --install '/usr/bin/java' 'java' '/usr/lib/jvm/jre1.8.0_131/bin/java' 1
+  sudo update-alternatives --set java /usr/lib/jvm/jre1.8.0_131/bin/java
+fi
 
-# install cassandra
-echo Fetching and installing Cassandra...
-sudo apt-get install cassandra=$CASSANDRA_VERSION -y --force-yes
-sudo /etc/init.d/cassandra restart
-
+#Install cassandra
+dpkg --list cassandra > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo Fetching and installing Cassandra...
+  sudo apt-get install cassandra=$CASSANDRA_VERSION -y --force-yes
+  sudo /etc/init.d/cassandra restart
+fi
+set -o errexit
 ################
 echo "*************************************************************************"
 echo Fetching and installing Kong...

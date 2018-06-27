@@ -26,6 +26,8 @@ on Kong or on custom plugins.
 * [Known issues](#known-issues)
 * [Enterprise support](#enterprise-support)
 
+**WINDOWS USERS**: Please check the [known issues](#known-issues)
+
 **IMPORTANT**: The Kong admin api is by default only available on localhost,
 but to be able to access it from the host system, the Vagrant box will listen
 on all interfaces by default. This might be a security risk in your environment.
@@ -340,22 +342,21 @@ These are mapped 1-on-1 between the host and guest.
 
 ## Known issues
 
-### worker_connections are not enough error
+### Windows ###
 
-When running tests these errors occasionally happen. The underlying reason seems
-to be that in the VM the connections are not freed up quickly enough. There
-seem to be 2 workarounds;
+When using the Vagrant box on Windows, in combination with the source
+repositories, then you might run into issues due to text file incompatibilities.
+Windows line endings are not supported in unix shell scripts. This problem does
+not apply to Lua files, since Lua is agnostic to the different line end markers.
 
-- add more memory to the VM. Recreate the vm with:
-```
-KONG_VB_MEM=4096 vagrant up
-```
+Most notably there are 2 files that cause problems (but there might be more):
 
-- run the tests by explicitly raising the connection limit, by prefixing the
- `resty` executable and the new limit `-c 65000`, for example:
-```
-resty -c 65000 bin/busted -v -o gtest
-```
+- `/kong/bin/busted` command line script for testing
+- `/kong/bin/kong` command line script for starting/stopping Kong
+
+The reason they have Windows line endings is because they are mounted from the
+host system. And `git` most likely converted them to Windows format when
+checking out the repository.
 
 ### Incompatible versions error
 
@@ -382,6 +383,23 @@ $ cd ..
 # start a box with a folder synced to your local Kong clone, and
 # specifically targetting 0.9.2, to get the required binary versions
 $ KONG_VERSION=0.9.2 vagrant up
+```
+
+### worker_connections are not enough error
+
+When running tests these errors occasionally happen. The underlying reason seems
+to be that in the VM the connections are not freed up quickly enough. There
+seem to be 2 workarounds;
+
+- add more memory to the VM. Recreate the vm with:
+```
+KONG_VB_MEM=4096 vagrant up
+```
+
+- run the tests by explicitly raising the connection limit, by prefixing the
+ `resty` executable and the new limit `-c 65000`, for example:
+```
+resty -c 65000 bin/busted -v -o gtest
 ```
 
 ### Vagrant error; The box 'hashicorp/precise64' could not be found

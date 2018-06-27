@@ -16,13 +16,16 @@ on Kong or on custom plugins.
 
 # Table of contents
 
-* [Testing Kong](#testing-kong)
+* [Try Kong](#try-kong)
 * [Development environment](#development-environment)
+  * [Preparing the development environment](#preparing-the-development-environment)
   * [Running Kong from the source repo](#running-kong-from-the-source-repo)
   * [Testing Kong and custom plugins](#testing-kong-and-custom-plugins)
+  * [Log files](#log-files)
   * [Development tips and tricks](#development-tips-and-tricks)
   * [Utilities and profiling](#utilities-and-profiling)
 * [Environment variables and configuration](#environment-variables-and-configuration)
+  * [Exposed ports](#exposed-ports)
 * [Known issues](#known-issues)
 * [Enterprise support](#enterprise-support)
 
@@ -32,7 +35,7 @@ on Kong or on custom plugins.
 but to be able to access it from the host system, the Vagrant box will listen
 on all interfaces by default. This might be a security risk in your environment.
 
-## Testing Kong
+## Try Kong
 
 If you just want to give Kong a test ride, and you have Vagrant installed,
 then you can simply clone this vagrant repo, and build the VM.
@@ -53,12 +56,7 @@ $ kong start --run-migrations
 $ vagrant ssh -c "kong start --run-migrations"
 ```
 
-Kong is now started and is available on the default ports;
-
-- `8000` Proxy port
-- `8443` SSL Proxy port
-- `8001` Admin API
-- `8444` SSL Admin API
+Kong is now started and is available on the [exposed ports](#exposed-ports).
 
 To verify Kong is running successfully, execute the following command (from
 the host machine):
@@ -88,7 +86,16 @@ You should receive a JSON response:
 See the [environment variables section](#environment-variables-and-configuration)
 below for defaults used and how to modify the settings of the Vagrant machine.
 
+When done you can destroy the virtual machine again:
+
+```shell
+# delete the virtual machine
+$ vagrant destroy
+```
+
 ## Development environment
+
+### Preparing the development environment
 
 Once you have Vagrant installed, follow these steps to set up a development
 environment for both Kong itself as well as for custom plugins. It will
@@ -205,7 +212,7 @@ $ bin/busted -v -o gtest
 ```
 
 Note that Kong comes with a special Busted script that runs against the
-OpenResty environment, instead of regular busted which runs against Lua(JIT)
+OpenResty environment, instead of regular Busted which runs against Lua(JIT)
 directly.
 
 To test the plugin specific tests:
@@ -219,6 +226,8 @@ $ cd /kong
 $ bin/busted /kong-plugin/spec
 ```
 
+### Log files
+
 To log stuff for debugging during your tests, you need to realize that there
 are generally 2 processes running when testing:
 
@@ -230,14 +239,10 @@ output will be in your terminal from where you executed the tests. In the
 latter case the output will be in the `error.log` file, but this file is
 cleaned automatically in between tests.
 Because the Kong tests run in the `servroot` prefix inside the Kong repo
-you can track them using a `tail` command, see [Log files](#log-files).
-
-## Log files
+you can track them using a `tail` command.
 
 Inside the virtual machine, the Kong prefix (working directory) will be set to
-`/kong/servroot`.
-
-You can track the log files (from the host) like this for example:
+`/kong/servroot`. You can track the log files (from the host) like this for example:
 
 ```shell
 vagrant ssh -c "tail -F /kong/servroot/logs/error.log"
@@ -329,6 +334,7 @@ or if you prefer all repos on the same level:
   |-kong-plugin
 ```
 
+### Exposed ports
 
 The (non-configurable) exposed ports are;
 

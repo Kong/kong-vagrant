@@ -360,8 +360,22 @@ Most notably there are 2 files that cause problems (but there might be more):
 - `/kong/bin/kong` command line script for starting/stopping Kong
 
 The reason they have Windows line endings is because they are mounted from the
-host system. And `git` most likely converted them to Windows format when
-checking out the repository.
+host system. And the Windows `git` client most likely converted them to Windows
+format when checking out the repository.
+
+Workaround:
+
+```shell
+# ssh into the vm
+$ vagrant ssh
+$ cd /kong
+
+# checkout the files using the unix git client which will check them out again
+# (but without doing the CrLf conversion that the Windows client does).
+$ git checkout -- bin/busted bin/kong
+```
+
+Now you can use the `bin/kong` and `bin/busted` commands as usual.
 
 ### Incompatible versions error
 

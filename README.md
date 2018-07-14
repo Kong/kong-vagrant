@@ -347,6 +347,33 @@ These are mapped 1-on-1 between the host and guest.
 
 ## Known issues
 
+### Postgres connection refused ###
+
+When you get an error that postgres refused the connection, eg.
+
+```
+Error: [postgres error] could not retrieve server_version: connection refused
+```
+
+Then make sure that Postgres was properly started, check it like this:
+
+```shell
+# ssh into the vm
+$ vagrant ssh
+
+$ service --status-all
+```
+
+If it wasn't started, you can do so by executing:
+
+```shell
+# ssh into the vm
+$ vagrant ssh
+
+$ sudo service postgresql start
+```
+
+
 ### Windows ###
 
 When using the Vagrant box on Windows, in combination with the source

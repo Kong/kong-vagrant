@@ -106,7 +106,7 @@ echo "*************************************************************************"
 sudo apt-get install -y httpie jq
 
 #Installing required dependencies
-sudo apt-get install -y git curl make pkg-config unzip apt-transport-https language-pack-en
+sudo apt-get install -y git curl make pkg-config unzip apt-transport-https language-pack-en libssl-dev
 
 
 ####################

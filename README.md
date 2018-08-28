@@ -202,8 +202,11 @@ machine.
 # ssh into the Vagrant machine
 $ vagrant ssh
 
-# testing: while inside '/kong' call `busted` from the repo as `bin/busted`!
+# enter the repo and start the linter
 $ cd /kong
+$ make lint
+
+# testing: while inside '/kong' call `busted` from the repo as `bin/busted`!
 $ bin/busted
 
 # or for more verbose output do
@@ -218,6 +221,10 @@ To test the plugin specific tests:
 ```shell
 # ssh into the Vagrant machine
 $ vagrant ssh
+
+# start the linter from the plugin repository
+$ cd /kong-plugin
+$ luacheck .
 
 # testing: while inside '/kong' call `busted` from the repo as `bin/busted`,
 # but specify the plugin testsuite to be executed

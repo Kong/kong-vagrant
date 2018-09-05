@@ -254,10 +254,10 @@ EOL
 
 
 # Adjust PATH for future ssh
-echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin" >> /home/vagrant/.bashrc
+echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin" >> /home/vagrant/.bashrc
 
 # do the same for root so we access to profiling tools
-echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin" >> /root/.bashrc
+echo "export PATH=\$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin" >> /root/.bashrc
 
 # copy host settings
 if [ -n "$LOGLEVEL" ]; then

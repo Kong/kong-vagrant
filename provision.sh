@@ -108,6 +108,12 @@ sudo apt-get install -y httpie jq
 #Installing required dependencies
 sudo apt-get install -y git curl make pkg-config unzip apt-transport-https language-pack-en libssl-dev
 
+echo "*************************************************************************"
+echo "installing test tools for Test::Nginx"
+echo "*************************************************************************"
+
+echo "y" | cpan
+cpan -T Test::Nginx
 
 ####################
 echo "*************************************************************************"
@@ -283,6 +289,11 @@ fi
 # Adjust LUA_PATH to find the plugin dev setup
 echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
 echo "if [ \$((1 + RANDOM % 20)) -eq 1 ]; then kong roar; fi" >> /home/vagrant/.bashrc
+
+# set Test::Nginx variables since it cannot run on a mounted
+# drive, hence we move it into home.
+echo "export TEST_NGINX_CERT_DIR=/kong/t/certs" >> /home/vagrant/.bashrc
+echo "export TEST_NGINX_SERVROOT=/home/vagrant/servroot" >> /home/vagrant/.bashrc
 
 # Set locale
 echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bashrc

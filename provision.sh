@@ -134,6 +134,8 @@ host    all             all             ::1/128                 trust
 host    all             all             0.0.0.0/0               trust
 EOL
 
+sudo systemctl enable postgresql
+
 sudo /etc/init.d/postgresql restart
 
 # Create PG user and database

@@ -288,8 +288,8 @@ if [ -n "$KONG_ADMIN_LISTEN_SSL" ]; then
   echo "export KONG_ADMIN_LISTEN_SSL=$KONG_ADMIN_LISTEN_SSL" >> /home/vagrant/.bashrc
 fi
 
-# Adjust LUA_PATH to find the plugin dev setup
-echo "export LUA_PATH=\"/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
+# Adjust LUA_PATH to find the source and plugin dev setup
+echo "export LUA_PATH=\"/kong/?.lua;/kong/?/init.lua;/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
 echo "if [ \$((1 + RANDOM % 20)) -eq 1 ]; then kong roar; fi" >> /home/vagrant/.bashrc
 
 # set Test::Nginx variables since it cannot run on a mounted

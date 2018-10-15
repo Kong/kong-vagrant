@@ -292,10 +292,8 @@ fi
 echo "export LUA_PATH=\"/kong/?.lua;/kong/?/init.lua;/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
 echo "if [ \$((1 + RANDOM % 20)) -eq 1 ]; then kong roar; fi" >> /home/vagrant/.bashrc
 
-# set Test::Nginx variables since it cannot run on a mounted
-# drive, hence we move it into home.
-echo "export TEST_NGINX_CERT_DIR=/kong/t/certs" >> /home/vagrant/.bashrc
-echo "export TEST_NGINX_SERVROOT=/home/vagrant/servroot" >> /home/vagrant/.bashrc
+# set Test::Nginx variables since it cannot have sockets on a mounted drive
+echo "export TEST_NGINX_NXSOCK=/tmp" >> /home/vagrant/.bashrc
 
 # Set locale
 echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bashrc

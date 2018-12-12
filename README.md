@@ -117,10 +117,10 @@ $ vagrant up
 # ssh into the Vagrant machine, and setup the dev environment
 $ vagrant ssh
 $ cd /kong
-$ make dev
+$ make dev -i
 
 # only if you want to run the custom plugin, tell Kong to load it
-$ export KONG_CUSTOM_PLUGINS=myplugin
+$ export KONG_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
 # we will also need to ensure that migrations are up to date
@@ -177,7 +177,7 @@ specified when building the Vagrant box will lead to unpredictable results.
 $ vagrant ssh
 
 # only if you want to run the custom plugin, tell Kong to load it
-$ export KONG_CUSTOM_PLUGINS=myplugin
+$ export KONG_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
 # we will also need to ensure that migrations are up to date

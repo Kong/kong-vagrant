@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV["KONG_VERSION"]
     version = ENV["KONG_VERSION"]
   else
-    version = "0.14.1"
+    version = "1.0.0"
   end
 
   if ENV["KONG_CASSANDRA"]
@@ -55,8 +55,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # set a default, 3.x, or for Kong < 0.10 then 2.x
     cversion = "3"
     v = version.split('.')
-    if v[1].strip.to_i == 0
-      if v[2].strip.to_i < 10
+    if v[0].strip.to_i == 0
+      if v[1].strip.to_i < 10
         cversion = "2"
       end
     end
@@ -87,7 +87,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/ — timesync-set-threshold", 10000]
   end
 
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "ubuntu/bionic64"
 
   if not source == ""
     config.vm.synced_folder source, "/kong"
@@ -100,6 +100,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 8001, host: 8001
   config.vm.network :forwarded_port, guest: 8443, host: 8443
   config.vm.network :forwarded_port, guest: 8444, host: 8444
+  config.vm.network :forwarded_port, guest: 9000, host: 9000 # only used with TCP stream proxy with Kong >= 0.15.0
   config.vm.network :forwarded_port, guest: 5432, host: 65432
 
   config.vm.provision "shell", path: "provision.sh",

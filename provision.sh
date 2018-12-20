@@ -40,7 +40,7 @@ KONG_ADMIN_LISTEN="0.0.0.0:8001"
 KONG_ADMIN_LISTEN_SSL="0.0.0.0:8444"
 
 if [ $KONG_NUM_VERSION -gt 001003 ]; then
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.bionic.all.deb"
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.trusty.all.deb"
 fi
 
 if [ $KONG_NUM_VERSION -ge 001300 ]; then
@@ -50,6 +50,9 @@ if [ $KONG_NUM_VERSION -ge 001300 ]; then
 fi
 
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
+  # use Bionic now instead of Trusty
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.bionic.all.deb"
+
   # Let's enable transparent listening option as well
   KONG_PROXY_LISTEN="0.0.0.0:8000 transparent, 0.0.0.0:8443 transparent ssl"
 

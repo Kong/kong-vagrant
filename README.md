@@ -122,7 +122,7 @@ $ vagrant up
 # ssh into the Vagrant machine, and setup the dev environment
 $ vagrant ssh
 $ cd /kong
-$ make dev -i
+$ make dev
 
 # only if you want to run the custom plugin, tell Kong to load it
 $ export KONG_PLUGINS=myplugin

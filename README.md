@@ -126,11 +126,15 @@ $ make dev -i
 
 # only if you want to run the custom plugin, tell Kong to load it
 $ export KONG_PLUGINS=myplugin
+# if you are running Kong < 0.14.0, run this instead:
+# $ export KONG_CUSTOM_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
 # we will also need to ensure that migrations are up to date
 $ cd /kong
-$ bin/kong migrations up
+$ bin/kong migrations bootstrap
+# if you are running Kong < 0.15.0, run this instead:
+# $ kong start --run-migrations
 $ bin/kong start
 ```
 
@@ -204,11 +208,15 @@ $ vagrant ssh
 
 # only if you want to run the custom plugin, tell Kong to load it
 $ export KONG_PLUGINS=myplugin
+# if you are running Kong < 0.14.0, run this instead:
+# $ export KONG_CUSTOM_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
 # we will also need to ensure that migrations are up to date
 $ cd /kong
-$ bin/kong migrations up
+$ bin/kong migrations bootstrap
+# if you are running Kong < 0.15.0 in the source repo, run this instead:
+# $ kong start --run-migrations
 $ bin/kong start
 ```
 

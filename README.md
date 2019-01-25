@@ -125,7 +125,7 @@ $ cd /kong
 $ make dev
 
 # only if you want to run the custom plugin, tell Kong to load it
-$ export KONG_PLUGINS=myplugin
+$ export KONG_PLUGINS=bundled,myplugin
 # if you are running Kong < 0.14.0, run this instead:
 # $ export KONG_CUSTOM_PLUGINS=myplugin
 
@@ -133,8 +133,8 @@ $ export KONG_PLUGINS=myplugin
 # we will also need to ensure that migrations are up to date
 $ cd /kong
 $ bin/kong migrations bootstrap
-# if you are running Kong < 0.15.0, run this instead:
-# $ kong start --run-migrations
+# if you are running Kong < 0.15.0, run this instead of bootstrap:
+# $ bin/kong migrations up
 $ bin/kong start
 ```
 
@@ -207,16 +207,15 @@ specified when building the Vagrant box will lead to unpredictable results.
 $ vagrant ssh
 
 # only if you want to run the custom plugin, tell Kong to load it
-$ export KONG_PLUGINS=myplugin
+$ export KONG_PLUGINS=bundled,myplugin
 # if you are running Kong < 0.14.0, run this instead:
 # $ export KONG_CUSTOM_PLUGINS=myplugin
 
 # startup kong: while inside '/kong' call `kong` from the repo as `bin/kong`!
-# we will also need to ensure that migrations are up to date
 $ cd /kong
 $ bin/kong migrations bootstrap
-# if you are running Kong < 0.15.0 in the source repo, run this instead:
-# $ kong start --run-migrations
+# if you are running Kong < 0.15.0, run this instead of bootstrap:
+# $ bin/kong migrations up
 $ bin/kong start
 ```
 

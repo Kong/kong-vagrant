@@ -103,7 +103,7 @@ echo "Installing APT packages"
 echo "*************************************************************************"
 
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
-  sudo -E apt-get install -qq iptables libcap2-bin nmap
+  sudo -E apt-get install -qq iptables libcap2-bin nmap libyaml-dev
 fi
 
 sudo -E apt-get install -qq httpie jq

@@ -416,33 +416,20 @@ $ sudo service postgresql start
 
 ### Windows ###
 
-When using the Vagrant box on Windows, in combination with the source
-repositories, then you might run into issues due to text file incompatibilities.
-Windows line endings are not supported in unix shell scripts. This problem does
-not apply to Lua files, since Lua is agnostic to the different line end markers.
+When using the Vagrant box on Windows there are some extra items to watch out for:
 
-Most notably there are 2 files that cause problems (but there might be more):
-
-- `/kong/bin/busted` command line script for testing
-- `/kong/bin/kong` command line script for starting/stopping Kong
-
-The reason they have Windows line endings is because they are mounted from the
-host system. And the Windows `git` client most likely converted them to Windows
-format when checking out the repository.
-
-Workaround:
+1. you cannot run the Vagrant-box inside another VM, so you have to run it on
+   the Windows host.
+2. in combination with the source repositories you might run into issues due to
+   text file incompatibilities. Windows line endings are not supported in unix
+   shell scripts. Use the `fix-windows` makefile target to fix this.
 
 ```shell
 # ssh into the vm
 $ vagrant ssh
 $ cd /kong
-
-# checkout the files using the unix git client which will check them out again
-# (but without doing the CrLf conversion that the Windows client does).
-$ git checkout -- bin/busted bin/kong
+$ make fix-windows
 ```
-
-Now you can use the `bin/kong` and `bin/busted` commands as usual.
 
 ### Incompatible versions error
 

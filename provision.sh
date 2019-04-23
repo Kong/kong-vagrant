@@ -216,14 +216,15 @@ if [ -n "$KONG_UTILITIES" ]; then
 
   # Install systemtap: https://openresty.org/en/build-systemtap.html
   sudo -E apt-get install -qq build-essential zlib1g-dev elfutils libdw-dev gettext
-  wget -q http://sourceware.org/systemtap/ftp/releases/systemtap-3.0.tar.gz
-  tar -xf systemtap-3.0.tar.gz
-  cd systemtap-3.0/
-  ./configure --prefix=/opt/stap --disable-docs \
-              --disable-publican --disable-refdocs CFLAGS="-g -O2"
-  make
-  sudo make install
-  rm -rf ./systemtap-3.0 systemtap-3.0.tar.gz
+  wget -q http://sourceware.org/systemtap/ftp/releases/systemtap-4.0.tar.gz
+  tar -xf systemtap-4.0.tar.gz
+  pushd systemtap-4.0/
+    ./configure --prefix=/opt/stap --disable-docs \
+                --disable-publican --disable-refdocs CFLAGS="-g -O2"
+    make
+    sudo make install
+  popd
+  rm -rf ./systemtap-4.0 systemtap-4.0.tar.gz
 
   # Install stapxx and openresty-systemtap-toolkit
   pushd /usr/local

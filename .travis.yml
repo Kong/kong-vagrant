@@ -1,0 +1,17 @@
+language: ruby
+rvm:
+  - "1.9.3"
+install:
+  - sudo apt-get -y install linux-headers-$(uname -r)
+  - sudo apt-get -y install virtualbox
+  - VBoxManage -v
+  - wget https://releases.hashicorp.com/vagrant/2.2.4/vagrant_2.2.4_x86_64.deb
+  - sudo dpkg -i vagrant_2.2.4_x86_64.deb
+env:
+  - KONG_NGINX_WORKER_PROCESSES=1
+script:
+  - sed -i 's,bionic64,xenial32,g' Vagrantfile
+  - /opt/vagrant/bin/vagrant up
+  - /opt/vagrant/bin/vagrant ssh --command "kong migrations bootstrap && kong start"
+  - curl http://localhost:8001 | grep "Welcome"
+

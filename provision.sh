@@ -40,7 +40,7 @@ KONG_ADMIN_LISTEN="0.0.0.0:8001"
 KONG_ADMIN_LISTEN_SSL="0.0.0.0:8444"
 
 if [ $KONG_NUM_VERSION -gt 001003 ]; then
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.trusty.all.deb"
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.trusty.all.deb"
 fi
 
 if [ $KONG_NUM_VERSION -ge 001300 ]; then
@@ -51,7 +51,7 @@ fi
 
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
   # use Bionic now instead of Trusty
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists%2Fkong-community-edition-${KONG_VERSION}.bionic.all.deb"
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.all.deb"
 
   # Let's enable transparent listening option as well
   KONG_PROXY_LISTEN="0.0.0.0:8000 transparent, 0.0.0.0:8443 transparent ssl"
@@ -170,20 +170,10 @@ sudo -E apt-get install -qq redis-server
 sudo chown vagrant /var/log/redis/redis-server.log
 
 echo "*************************************************************************"
-echo "Installing Java and Cassandra $CASSANDRA_VERSION"
+echo "Installing Cassandra $CASSANDRA_VERSION"
 echo "*************************************************************************"
 
 set +o errexit
-java -version  > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-  echo "Installing Java"
-  echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo -E debconf-set-selections
-  echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 seen true" | sudo -E debconf-set-selections
-  sudo -E add-apt-repository ppa:webupd8team/java
-  sudo -E apt-get update -qq
-  sudo -E apt-get install -qq oracle-java8-installer
-fi
-
 dpkg -f noninteractive --list cassandra > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "Installing Cassandra"

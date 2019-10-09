@@ -51,7 +51,7 @@ fi
 
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
   # use Bionic now instead of Trusty
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.all.deb"
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.amd64.deb"
 
   # Let's enable transparent listening option as well
   KONG_PROXY_LISTEN="0.0.0.0:8000 transparent, 0.0.0.0:8443 transparent ssl"

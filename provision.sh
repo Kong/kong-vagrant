@@ -28,11 +28,11 @@ if [ "$CASSANDRA_VERSION" = "2" ]; then
    CASSANDRA_VERSION=2.2.13
    CASSANDRA_VERSION_REPO=22x
 else
-   CASSANDRA_VERSION=3.11.4
+   CASSANDRA_VERSION=3.11.5
    CASSANDRA_VERSION_REPO=311x
 fi
 
-POSTGRES_VERSION=9.6
+POSTGRES_VERSION=10
 
 # Set some version dependent options
 KONG_DOWNLOAD_URL="https://github.com/Kong/kong/releases/download/$KONG_VERSION/kong-$KONG_VERSION.precise_all.deb"

@@ -13,8 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   elsif File.directory?("../kong")
     source = "../kong"
   else
-    source = ""
-  end
+    source = "" end
 
   if ENV["KONG_PLUGIN_PATH"]
     plugin_source = ENV["KONG_PLUGIN_PATH"]
@@ -96,6 +95,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder plugin_source, "/kong-plugin"
   end
 
+  # Sync terraform folder
+  config.vm.synced_folder "../../../tf", "/tf"
+
+
+  config.vm.provision "file", source: "./terraform-provider-kong_v5.0.0", destination: "~/terraform-provider-kong_v5.0.0"
+  config.vm.provision "file", source: "./entrypoint.sh", destination: "~/"
+
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001
   config.vm.network :forwarded_port, guest: 8443, host: 8443
@@ -106,4 +112,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", path: "provision.sh",
      env: { "HTTP_PROXY": ENV["HTTP_PROXY"], "HTTPS_PROXY": ENV["HTTPS_PROXY"]},
     :args => [version, cversion, utils, anreports, loglevel]
+
+  # Run init.sh script
+  config.vm.provision "shell", path: "init.sh"
 end

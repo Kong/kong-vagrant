@@ -14,3 +14,10 @@ cd /
 
 echo "***** Compiling kong *****"
 make --directory=./kong dev
+
+echo "***** installing terraform *****"
+cd /tmp
+wget --quiet https://releases.hashicorp.com/terraform/0.11.15-oci/terraform_0.11.15-oci_linux_amd64.zip
+unzip -qq terraform_0.11.15-oci_linux_amd64.zip
+
+mv ./terraform /usr/local/bin/

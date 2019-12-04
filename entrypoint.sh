@@ -1,13 +1,13 @@
-#!/bin/bash
-cd ../..
+#!/bin/env bash
 
 export KONG_PLUGINS=bundled,permission-middleware
-echo "KONG PLUGINS MADE"
 
-cd ./tf/dev
+cd /tf/dev
+
 sudo terraform init
 
-../../kong/bin/kong migrations bootstrap
+kong migrations bootstrap
+
 kong start
 
-terraform apply
+terraform apply -auto-approve

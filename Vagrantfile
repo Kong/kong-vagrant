@@ -13,7 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   elsif File.directory?("../kong")
     source = "../kong"
   else
-    source = "" end
+    source = ""
+  end
 
   if ENV["KONG_PLUGIN_PATH"]
     plugin_source = ENV["KONG_PLUGIN_PATH"]

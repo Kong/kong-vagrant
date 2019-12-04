@@ -102,7 +102,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Sync terraform-provider-kong
   config.vm.provision "file", source: "terraform-provider-kong_v5.0.0", destination: "~/.terraform.d/plugins/"
 
-  config.vm.provision "file", source: "./entrypoint.sh", destination: "~/"
+  config.vm.provision "file", source: "./scripts/entrypoint.sh", destination: "~/"
 
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001
@@ -111,10 +111,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 9000, host: 9000 # only used with TCP stream proxy with Kong >= 0.15.0
   config.vm.network :forwarded_port, guest: 5432, host: 65432
 
-  config.vm.provision "shell", path: "provision.sh",
+  config.vm.provision "shell", path: "./scripts/provision.sh",
      env: { "HTTP_PROXY": ENV["HTTP_PROXY"], "HTTPS_PROXY": ENV["HTTPS_PROXY"]},
     :args => [version, cversion, utils, anreports, loglevel]
 
   # Run initialize Kong and plugins
-  config.vm.provision "shell", path: "init.sh"
+  config.vm.provision "shell", path: "./scripts/init.sh"
 end

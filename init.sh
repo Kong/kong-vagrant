@@ -10,14 +10,14 @@ printf "\tkong-spec-expose\n"
 cd /kong-plugin/kong-spec-expose
 lurarocks make *.rockspec
 
-cd /
-
 echo "***** Compiling kong *****"
+
+cd /
 make --directory=./kong dev
 
 echo "***** installing terraform *****"
-cd /tmp
-wget --quiet https://releases.hashicorp.com/terraform/0.11.15-oci/terraform_0.11.15-oci_linux_amd64.zip
-unzip -qq terraform_0.11.15-oci_linux_amd64.zip
 
+cd /tmp
+wget --quiet https://releases.hashicorp.com/terraform/0.12.17/terraform_0.12.17_linux_amd64.zip
+unzip -qq terraform*.zip
 mv ./terraform /usr/local/bin/

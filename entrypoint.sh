@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export KONG_PLUGINS=bundled,permission-middleware
+export KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware
 
 cd /tf/dev
 

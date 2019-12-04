@@ -96,9 +96,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder plugin_source, "/kong-plugin"
   end
 
-  # Install unzip, needed for terraform setup
-  config.vm.provision "shell", inline: "apt-get install unzip"
-
   # Sync terraform folder
   config.vm.synced_folder "../../tf", "/tf"
 

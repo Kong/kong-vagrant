@@ -1,21 +1,27 @@
 #!/bin/bash
 
-echo "***** Compiling kong middleware *****"
+printf "***** Compiling kong middleware *****\n\n"
 
-printf "\tpermission-middleware\n"
-cd /kong-plugin/permission-middleware
-luarocks make *.rockspec
+cd /kong-plugin
 
-printf "\tkong-spec-expose\n"
-cd /kong-plugin/kong-spec-expose
-lurarocks make *.rockspec
+for i in *; do
+  if [ -d $i ]; then
+    cd $i
 
-echo "***** Compiling kong *****"
+    printf "\t$i\n\n"
+
+    luarocks make *.rockspec
+
+    cd /kong-plugin
+  fi
+done
+
+printf "***** Compiling kong *****\n\n"
 
 cd /
 make --directory=./kong dev
 
-echo "***** installing terraform *****"
+printf "***** installing terraform *****\n\n"
 
 cd /tmp
 wget --quiet https://releases.hashicorp.com/terraform/0.12.17/terraform_0.12.17_linux_amd64.zip

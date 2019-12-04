@@ -1,8 +1,8 @@
 #!/bin/bash
 
-cd ../../kong-plugin
+cd /kong-plugin
 luarocks make permission-middleware-0.1-1.rockspec
-cd ../
+cd /
 
 echo "PLUGINS MADE"
 

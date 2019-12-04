@@ -1,0 +1,3 @@
+[submodule "submodules/kong"]
+	path = submodules/kong
+	url = git@github.com:ecobee/sb-kong-vagrant.git

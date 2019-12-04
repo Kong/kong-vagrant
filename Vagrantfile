@@ -95,11 +95,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder plugin_source, "/kong-plugin"
   end
 
+  # Install terraform
+  config.vm.provision "shell", inline: "snap install terraform"
+
   # Sync terraform folder
   config.vm.synced_folder "../../../../tf", "/tf"
 
+  # Sync terraform-provider-kong
+  config.vm.provision "file", source: "terraform-provider-kong_v5.0.0", destination: "~/.terraform.d/plugins/"
 
-  config.vm.provision "file", source: "./terraform-provider-kong_v5.0.0", destination: "~/terraform-provider-kong_v5.0.0"
   config.vm.provision "file", source: "./entrypoint.sh", destination: "~/"
 
   config.vm.network :forwarded_port, guest: 8000, host: 8000
@@ -113,6 +117,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      env: { "HTTP_PROXY": ENV["HTTP_PROXY"], "HTTPS_PROXY": ENV["HTTPS_PROXY"]},
     :args => [version, cversion, utils, anreports, loglevel]
 
-  # Run init.sh script
+  # Run initialize Kong and plugins
   config.vm.provision "shell", path: "init.sh"
 end

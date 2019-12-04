@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 export KONG_PLUGINS=bundled,permission-middleware
 

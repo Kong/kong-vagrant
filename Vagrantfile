@@ -97,7 +97,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Sync terraform folder
-  config.vm.synced_folder "../../tf", "/tf"
+  config.vm.synced_folder "./tf", "/tf"
 
   # Sync terraform-provider-kong
   config.vm.provision "file", source: "terraform-provider-kong_v5.0.0", destination: "~/.terraform.d/plugins/"

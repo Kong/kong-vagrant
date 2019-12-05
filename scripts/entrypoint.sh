@@ -17,3 +17,6 @@ else
 fi
 
 terraform apply -auto-approve
+
+# TF_VAR_sb_api_permissions_host=10.90.41.171 TF_VAR_sb_api_permissions_port=3011 TF_VAR_sb_api_resources_host=10.90.41.171 TF_VAR_sb_api_resources_port=3010
+# KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware TF_VAR_sb_api_permissions_host=10.90.41.171 TF_VAR_sb_api_permissions_port=3011 TF_VAR_sb_api_resources_host=10.90.41.171 TF_VAR_sb_api_resources_port=3010 terraform apply -auto-approve

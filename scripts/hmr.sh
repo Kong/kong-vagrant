@@ -1,8 +1,8 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 
 reload_plugins() {
   echo "Reloading Kong Plugins"
-  vagrant ssh -c "cd /kong-plugin/permission/middleware; luarocks make *.rockspec"
+  vagrant ssh -c "cd /kong-plugin/permission-middleware; luarocks make *.rockspec"
   vagrant ssh -c "cd /tf/dev; terraform apply -auto-approve"
 }
 

@@ -4,10 +4,16 @@ export KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware
 
 cd /tf/dev
 
-sudo terraform init
+terraform init
 
 kong migrations bootstrap
 
-kong start
+KONG_STATUS="$(kong health | grep running -o)"
+
+if [ "$KONG_STATUS" == "running" ]; then
+  kong restart
+else
+  kong start
+fi
 
 terraform apply -auto-approve

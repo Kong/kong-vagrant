@@ -6,14 +6,14 @@ cd /tf/dev
 
 terraform init
 
-kong migrations bootstrap
+sudo -u vagrant kong migrations bootstrap
 
 KONG_STATUS="$(kong health | grep running -o)"
 
 if [ "$KONG_STATUS" == "running" ]; then
-  kong restart
+  sudo -u vagrant kong restart
 else
-  kong start
+  sudo -u vagrant kong start
 fi
 
 terraform apply -auto-approve

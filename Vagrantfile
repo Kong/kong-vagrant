@@ -99,10 +99,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Sync terraform folder
   config.vm.synced_folder "./tf", "/tf"
 
-  # Sync terraform-provider-kong
-  config.vm.provision "file", source: "terraform-provider-kong_v5.0.0", destination: "~/.terraform.d/plugins/"
+  # Copy terraform-provider-kong
+  config.vm.provision "file", source: "terraform-provider-kong_v5.0.0", destination: "$HOME/.terraform.d/plugins/"
 
-  config.vm.provision "file", source: "./scripts/entrypoint.sh", destination: "~/"
+  # Sync all helper scripts into vm
+  config.vm.synced_folder "./scripts", "/home/vagrant/scripts"
 
   config.vm.network :forwarded_port, guest: 8000, host: 8000
   config.vm.network :forwarded_port, guest: 8001, host: 8001

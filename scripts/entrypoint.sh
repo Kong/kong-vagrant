@@ -2,18 +2,36 @@
 
 export KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware
 
+echo "******************************"
+echo "Initializing Terraform"
+echo "******************************"
+
 cd /tf/dev
 
 terraform init
 
-sudo -u vagrant kong migrations bootstrap
+echo "******************************"
+echo "Bootstrapping Kong DB"
+echo "******************************"
+
+kong migrations bootstrap
 
 KONG_STATUS="$(kong health | grep running -o)"
 
+echo "******************************"
+echo "Starting Kong"
+echo "plugins enabled:"
+echo $KONG_PLUGINS
+echo "******************************"
+
 if [ "$KONG_STATUS" == "running" ]; then
-  sudo -u vagrant kong restart
+  KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware kong restart
 else
-  sudo -u vagrant kong start
+  KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware kong start
 fi
+
+echo "******************************"
+echo "Applying Kong Terraform config"
+echo "******************************"
 
 terraform apply -auto-approve

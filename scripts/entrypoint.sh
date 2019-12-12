@@ -25,9 +25,9 @@ echo $KONG_PLUGINS
 echo "******************************"
 
 if [ "$KONG_STATUS" == "running" ]; then
-  KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware kong restart
+  KONG_PLUGINS=bundled,jwt,kong-spec-expose,permission-middleware kong restart
 else
-  KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware kong start
+  KONG_PLUGINS=bundled,jwt,kong-spec-expose,permission-middleware kong start
 fi
 
 echo "******************************"

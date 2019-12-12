@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export KONG_PLUGINS=bundled,kong-spec-expose,permission-middleware
-
 echo "******************************"
 echo "Initializing Terraform"
 echo "******************************"
@@ -18,6 +16,8 @@ kong migrations bootstrap
 
 KONG_STATUS="$(kong health | grep running -o)"
 
+export KONG_PLUGINS=cors,jwt,permission-middleware,rate-limiting
+
 echo "******************************"
 echo "Starting Kong"
 echo "plugins enabled:"
@@ -25,9 +25,9 @@ echo $KONG_PLUGINS
 echo "******************************"
 
 if [ "$KONG_STATUS" == "running" ]; then
-  KONG_PLUGINS=bundled,jwt,kong-spec-expose,permission-middleware kong restart
+  kong restart
 else
-  KONG_PLUGINS=bundled,jwt,kong-spec-expose,permission-middleware kong start
+  kong start
 fi
 
 echo "******************************"

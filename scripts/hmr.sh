@@ -2,7 +2,7 @@
 
 reload_plugins() {
   echo "Reloading Kong Plugins"
-  vagrant ssh -c "cd /kong-plugin/permission-middleware; luarocks make *.rockspec"
+  vagrant ssh -c "~/scripts/compile_plugins.sh"
   vagrant ssh -c "cd /tf/dev; terraform apply -auto-approve"
 }
 

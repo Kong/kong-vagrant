@@ -16,7 +16,7 @@ kong migrations bootstrap
 
 KONG_STATUS="$(kong health | grep running -o)"
 
-export KONG_PLUGINS=cors,jwt,permission-middleware,rate-limiting
+export KONG_PLUGINS=cors,jwt,jwt-claims-headers,permission-middleware,rate-limiting
 
 echo "******************************"
 echo "Starting Kong"

@@ -63,12 +63,14 @@ fi
 if [ $KONG_NUM_VERSION -ge 010300 ]; then
   # use Bionic now instead of Trusty
   KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.amd64.deb"
+fi
 
-  # Let's enable transparent listening option as well
-  KONG_PROXY_LISTEN="0.0.0.0:8000 transparent, 0.0.0.0:8443 transparent ssl"
-
-  # Kong 0.15.0 has a stream module, let's enable that too
-  KONG_STREAM_LISTEN="0.0.0.0:9000 transparent"
+if [ $KONG_NUM_VERSION -ge 020000 ]; then
+  # revert to defaults for these listeners
+  unset KONG_PROXY_LISTEN
+  unset KONG_STREAM_LISTEN
+  # update admin to defaults again, but on 0.0.0.0 instead of 127.0.0.1
+  KONG_ADMIN_LISTEN=0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384
 fi
 
 sudo chown -R vagrant /usr/local
@@ -319,8 +321,11 @@ sudo echo "LC_ALL=\"en_US.UTF-8\"" >> /etc/default/locale
 sudo chown -R vagrant /usr/local
 
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
-  # Allow non-root to start Kong with transparent flag
-  sudo setcap cap_net_admin=eip /usr/local/openresty/nginx/sbin/nginx
+  if [ $KONG_NUM_VERSION -lt 020000 ]; then
+    # Allow non-root to start Kong with transparent flag
+    # only if version: 0.15.0 <= Kong < 2.0.0
+    sudo setcap cap_net_admin=eip /usr/local/openresty/nginx/sbin/nginx
+  fi
 fi
 
 echo .

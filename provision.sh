@@ -70,7 +70,7 @@ if [ $KONG_NUM_VERSION -ge 020000 ]; then
   unset KONG_PROXY_LISTEN
   unset KONG_STREAM_LISTEN
   # update admin to defaults again, but on 0.0.0.0 instead of 127.0.0.1
-  KONG_ADMIN_LISTEN=0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384
+  KONG_ADMIN_LISTEN="0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384"
 fi
 
 sudo chown -R vagrant /usr/local

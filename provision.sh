@@ -298,8 +298,10 @@ fi
 
 # Set stream and proxy listen addresses for Kong > 0.15.0
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
-  echo "export KONG_PROXY_LISTEN=\"$KONG_PROXY_LISTEN\"" >> /home/vagrant/.bashrc
-  echo "export KONG_STREAM_LISTEN=\"$KONG_STREAM_LISTEN\"" >> /home/vagrant/.bashrc
+  if [ $KONG_NUM_VERSION -lt 020000 ]; then
+    echo "export KONG_PROXY_LISTEN=\"$KONG_PROXY_LISTEN\"" >> /home/vagrant/.bashrc
+    echo "export KONG_STREAM_LISTEN=\"$KONG_STREAM_LISTEN\"" >> /home/vagrant/.bashrc
+  fi
 fi
 
 # Adjust LUA_PATH to find the source and plugin dev setup

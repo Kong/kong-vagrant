@@ -330,5 +330,22 @@ if [ $KONG_NUM_VERSION -ge 001500 ]; then
   fi
 fi
 
+# store the Kong version build, and add a warning
+echo "export KONG_VERSION_BUILD=$KONG_VERSION"                     >> /home/vagrant/.bashrc
+echo "if [ -f \"/kong/bin/kong\" ]; then"                          >> /home/vagrant/.bashrc
+echo "  pushd /kong > /dev/null"                                   >> /home/vagrant/.bashrc
+echo "  LAST_TAG=\$(git describe --tags)"                          >> /home/vagrant/.bashrc
+echo "  if [ ! \"\$LAST_TAG\" == \"\$KONG_VERSION_BUILD\" ]; then" >> /home/vagrant/.bashrc
+echo "    echo \"*******************************************************************************\""   >> /home/vagrant/.bashrc
+echo "    echo \" WARNING: The Kong source in /kong has latest tag \$LAST_TAG\""                      >> /home/vagrant/.bashrc
+echo "    echo \"          whilst this vagrant box was build against version \$KONG_VERSION_BUILD.\"" >> /home/vagrant/.bashrc
+echo "    echo \"          Please make sure the checked-out version in /kong matches the\""           >> /home/vagrant/.bashrc
+echo "    echo \"          binaries of \$KONG_VERSION_BUILD.\""                                       >> /home/vagrant/.bashrc
+echo "    echo \"*******************************************************************************\""   >> /home/vagrant/.bashrc
+echo "  fi"                                                        >> /home/vagrant/.bashrc
+echo "  popd > /dev/null"                                          >> /home/vagrant/.bashrc
+echo "fi"                                                          >> /home/vagrant/.bashrc
+
+
 echo .
 echo "Successfully Installed Kong version: $KONG_VERSION"

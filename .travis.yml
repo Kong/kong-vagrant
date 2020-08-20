@@ -22,8 +22,10 @@ install:
 
 script:
   - sudo vagrant validate
+  - git clone https://github.com/Kong/kong.git
   - sudo vagrant up --provider=libvirt
   - sudo vagrant status
+  - sudo vagrant ssh -c "cd /kong; make dev"
   # Kong is not successfully running but I believe knowing the Vagrantfile is valid and it can provision is beneficial
   # - sudo vagrant ssh -c "kong version"
   # - sudo vagrant ssh -c "kong status"

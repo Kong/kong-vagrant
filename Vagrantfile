@@ -87,7 +87,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/ — timesync-set-threshold", 10000]
   end
 
-  config.vm.box = "ubuntu/focal64"
+  config.vm.box = "generic/ubuntu1904"
 
   if not source == ""
     config.vm.synced_folder source, "/kong"

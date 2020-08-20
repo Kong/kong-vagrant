@@ -61,8 +61,8 @@ if [ $KONG_NUM_VERSION -ge 001500 ]; then
 fi
 
 if [ $KONG_NUM_VERSION -ge 010300 ]; then
-  # use Bionic now instead of Trusty
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.amd64.deb"
+  # use Focal now instead of Trusty or Bionic
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.focal.amd64.deb"
 fi
 
 if [ $KONG_NUM_VERSION -ge 020000 ]; then

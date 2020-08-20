@@ -120,7 +120,7 @@ if [ $KONG_NUM_VERSION -ge 001500 ]; then
 fi
 
 sudo -E apt-get install -qq httpie jq
-sudo -E apt-get install -qq git curl make pkg-config unzip apt-transport-https language-pack-en libssl-dev m4 cpanminus zlibc zlib1g-dev
+sudo -E apt-get install -qq git curl make pkg-config unzip apt-transport-https language-pack-en libssl-dev m4 cpanminus zlibc zlib1g-dev libyaml-dev
 
 echo "*************************************************************************"
 echo "Installing test tools for Test::Nginx"

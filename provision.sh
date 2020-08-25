@@ -61,8 +61,8 @@ if [ $KONG_NUM_VERSION -ge 001500 ]; then
 fi
 
 if [ $KONG_NUM_VERSION -ge 010300 ]; then
-  # use Focal now instead of Trusty or Bionic
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.focal.amd64.deb"
+  # download name changed
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.amd64.deb"
 fi
 
 if [ $KONG_NUM_VERSION -ge 020000 ]; then
@@ -71,6 +71,8 @@ if [ $KONG_NUM_VERSION -ge 020000 ]; then
   unset KONG_STREAM_LISTEN
   # update admin to defaults again, but on 0.0.0.0 instead of 127.0.0.1
   KONG_ADMIN_LISTEN="0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384"
+  # use Focal now instead of Bionic
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.focal.amd64.deb"
 fi
 
 sudo chown -R vagrant /usr/local
@@ -102,9 +104,6 @@ echo "*************************************************************************"
 echo "Setting up APT repositories"
 echo "*************************************************************************"
 
-wget -q -O - '$@' https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo -E apt-key add -
-sudo -E add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main"
-
 wget -q -O - '$@' https://www.apache.org/dist/cassandra/KEYS | sudo -E apt-key add -
 sudo -E add-apt-repository "deb http://www.apache.org/dist/cassandra/debian $CASSANDRA_VERSION_REPO main"
 
@@ -120,7 +119,9 @@ if [ $KONG_NUM_VERSION -ge 001500 ]; then
 fi
 
 sudo -E apt-get install -qq httpie jq
-sudo -E apt-get install -qq git curl make pkg-config unzip apt-transport-https language-pack-en libssl-dev m4 cpanminus zlibc zlib1g-dev libyaml-dev
+sudo -E apt-get install -qq git curl make pkg-config unzip apt-transport-https \
+                            language-pack-en libssl-dev m4 cpanminus zlibc \
+                            zlib1g-dev libyaml-dev postgresql-common
 
 echo "*************************************************************************"
 echo "Installing test tools for Test::Nginx"
@@ -133,8 +134,8 @@ echo "Installing and configuring Postgres $POSTGRES_VERSION"
 echo "*************************************************************************"
 
 set +o errexit
-dpkg -f noninteractive --list postgresql-$POSTGRES_VERSION > /dev/null 2>&1
-if [ $? -ne 0 ]; then
+
+sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 sudo -E apt-get install -qq postgresql-$POSTGRES_VERSION
 
 # Configure Postgres
@@ -172,7 +173,6 @@ CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION kong;
 GRANT ALL ON SCHEMA public TO kong;
 EOF
 
-fi
 set -o errexit
 
 echo "*************************************************************************"

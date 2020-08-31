@@ -22,7 +22,9 @@ install:
 
 script:
   - sudo vagrant validate
+  - git clone https://github.com/Kong/kong.git
   - sudo vagrant up --provider=libvirt
   - sudo vagrant status
+  - sudo vagrant ssh -c "cd /kong; git checkout \$KONG_VERSION_BUILD; make dev"
   - sudo vagrant ssh -c "kong version"
-
+  - curl -I localhost:8000

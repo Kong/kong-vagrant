@@ -72,7 +72,7 @@ if [ $KONG_NUM_VERSION -ge 020000 ]; then
   # update admin to defaults again, but on 0.0.0.0 instead of 127.0.0.1
   KONG_ADMIN_LISTEN="0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384"
   # use Focal now instead of Bionic
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.focal.amd64.deb"
+  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.xenial.amd64.deb"
 fi
 
 sudo chown -R vagrant /usr/local
@@ -136,7 +136,7 @@ echo "*************************************************************************"
 set +o errexit
 
 sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
-sudo -E apt-get install -qq postgresql-$POSTGRES_VERSION
+sudo -E apt-get install --allow-unauthenticated -qq postgresql-$POSTGRES_VERSION
 
 # Configure Postgres
 sudo sed -i "s/#listen_address.*/listen_addresses '*'/" /etc/postgresql/$POSTGRES_VERSION/main/postgresql.conf

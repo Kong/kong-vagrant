@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/Kong/kong-vagrant.svg?branch=master)](https://travis-ci.com/Kong/kong-vagrant)
+
 # [Kong][website-url] :heavy_plus_sign: [Vagrant](https://www.vagrantup.com/)
 
 [![Website][website-badge]][website-url]

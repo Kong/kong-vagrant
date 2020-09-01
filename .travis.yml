@@ -26,7 +26,4 @@ script:
   - sudo vagrant up --provider=libvirt
   - sudo vagrant status
   - sudo vagrant ssh -c "cd /kong; git checkout \$KONG_VERSION_BUILD; make dev"
-  # Kong is not successfully running but I believe knowing the Vagrantfile is valid and it can provision is beneficial
-  # - sudo vagrant ssh -c "kong version"
-  # - sudo vagrant ssh -c "kong status"
-  # - curl -I localhost:8000
+  - sudo vagrant ssh -c "kong version"

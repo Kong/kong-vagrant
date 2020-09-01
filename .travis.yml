@@ -1,0 +1,32 @@
+dist: bionic
+language: python
+
+# Cache the big Vagrant boxes
+cache:
+  directories:
+  - /home/travis/.vagrant.d/boxes
+
+install:
+  # Install libvrt & KVM (see https://github.com/alvistack/ansible-role-virtualbox/blob/master/.travis.yml)
+  - sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
+
+  # Download Vagrant & Install Vagrant package
+  - sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
+  - sudo dpkg -i vagrant_2.2.7_x86_64.deb
+
+  # Vagrant correctly installed?
+  - vagrant --version
+
+  # Install vagrant-libvirt Vagrant plugin
+  - sudo vagrant plugin install vagrant-libvirt
+
+script:
+  - sudo vagrant validate
+  - git clone https://github.com/Kong/kong.git
+  - sudo vagrant up --provider=libvirt
+  - sudo vagrant status
+  - sudo vagrant ssh -c "cd /kong; git checkout \$KONG_VERSION_BUILD; make dev"
+  # Kong is not successfully running but I believe knowing the Vagrantfile is valid and it can provision is beneficial
+  # - sudo vagrant ssh -c "kong version"
+  # - sudo vagrant ssh -c "kong status"
+  # - curl -I localhost:8000

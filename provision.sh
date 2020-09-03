@@ -256,10 +256,14 @@ echo "*************************************************************************"
 echo "Update localization, paths, ulimit, etc."
 echo "*************************************************************************"
 
-echo 'alias ks="kong start -c kong.conf.default"' >> /home/vagrant/.bashrc
-echo 'alias kmu="kong migrations up -c kong.conf.default"' >> /home/vagrant/.bashrc
-echo 'alias kmr="kong migrations reset -c kong.conf.default --yes"' >> /home/vagrant/.bashrc
-echo 'alias kss="kong stop ; ks"' >> /home/vagrant/.bashrc
+if [ ! -f /home/vagrant/.bash_profile ]; then
+  echo "# Kong additions" > /home/vagrant/.bash_profile
+fi
+echo 'alias ks="kong start -c kong.conf.default"' >> /home/vagrant/.bash_profile
+echo 'alias kmu="kong migrations up -c kong.conf.default"' >> /home/vagrant/.bash_profile
+echo 'alias kmb="kong migrations bootstrap -c kong.conf.default"' >> /home/vagrant/.bash_profile
+echo 'alias kmr="kong migrations reset -c kong.conf.default --yes"' >> /home/vagrant/.bash_profile
+echo 'alias kss="kong stop ; ks"' >> /home/vagrant/.bash_profile
 
 export PATH=$PATH:/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx
 
@@ -278,17 +282,17 @@ EOL
 
 
 # Adjust PATH for future SSH
-echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:\$PATH:" >> /home/vagrant/.bashrc
+echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:\$PATH:" >> /home/vagrant/.bash_profile
 
 # Do the same for root so we access to profiling tools
 echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:\$PATH" >> /root/.bashrc
 
 # Copy host settings
 if [ -n "$LOGLEVEL" ]; then
-  echo "export KONG_LOG_LEVEL=$LOGLEVEL" >> /home/vagrant/.bashrc
+  echo "export KONG_LOG_LEVEL=$LOGLEVEL" >> /home/vagrant/.bash_profile
 fi
 if [ -n "$ANREPORTS" ]; then
-  echo "export KONG_ANONYMOUS_REPORTS=$ANREPORTS" >> /home/vagrant/.bashrc
+  echo "export KONG_ANONYMOUS_REPORTS=$ANREPORTS" >> /home/vagrant/.bash_profile
 fi
 
 # Create prefix (working directory) to the same location as source tree if available
@@ -296,32 +300,32 @@ if [ ! -d "/kong" ]; then
   sudo mkdir /kong
   sudo chown -R vagrant /kong
 fi
-echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bashrc
+echo "export KONG_PREFIX=/kong/servroot" >> /home/vagrant/.bash_profile
 
 # Set admin listen addresses
-echo "export KONG_ADMIN_LISTEN=\"$KONG_ADMIN_LISTEN\"" >> /home/vagrant/.bashrc
+echo "export KONG_ADMIN_LISTEN=\"$KONG_ADMIN_LISTEN\"" >> /home/vagrant/.bash_profile
 if [ -n "$KONG_ADMIN_LISTEN_SSL" ]; then
-  echo "export KONG_ADMIN_LISTEN_SSL=\"$KONG_ADMIN_LISTEN_SSL\"" >> /home/vagrant/.bashrc
+  echo "export KONG_ADMIN_LISTEN_SSL=\"$KONG_ADMIN_LISTEN_SSL\"" >> /home/vagrant/.bash_profile
 fi
 
 # Set stream and proxy listen addresses for Kong > 0.15.0
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
   if [ $KONG_NUM_VERSION -lt 020000 ]; then
-    echo "export KONG_PROXY_LISTEN=\"$KONG_PROXY_LISTEN\"" >> /home/vagrant/.bashrc
-    echo "export KONG_STREAM_LISTEN=\"$KONG_STREAM_LISTEN\"" >> /home/vagrant/.bashrc
+    echo "export KONG_PROXY_LISTEN=\"$KONG_PROXY_LISTEN\"" >> /home/vagrant/.bash_profile
+    echo "export KONG_STREAM_LISTEN=\"$KONG_STREAM_LISTEN\"" >> /home/vagrant/.bash_profile
   fi
 fi
 
 # Adjust LUA_PATH to find the source and plugin dev setup
-echo "export LUA_PATH=\"/kong/?.lua;/kong/?/init.lua;/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bashrc
-echo "if [ \$((1 + RANDOM % 20)) -eq 1 ]; then kong roar; fi" >> /home/vagrant/.bashrc
+echo "export LUA_PATH=\"/kong/?.lua;/kong/?/init.lua;/kong-plugin/?.lua;/kong-plugin/?/init.lua;;\"" >> /home/vagrant/.bash_profile
+echo "if [ \$((1 + RANDOM % 20)) -eq 1 ]; then kong roar; fi" >> /home/vagrant/.bash_profile
 
 # Set Test::Nginx variables since it cannot have sockets on a mounted drive
-echo "export TEST_NGINX_NXSOCK=/tmp" >> /home/vagrant/.bashrc
+echo "export TEST_NGINX_NXSOCK=/tmp" >> /home/vagrant/.bash_profile
 
 # Set locale
-echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bashrc
-echo "export LC_CTYPE=en_US.UTF-8" >> /home/vagrant/.bashrc
+echo "export LC_ALL=en_US.UTF-8" >> /home/vagrant/.bash_profile
+echo "export LC_CTYPE=en_US.UTF-8" >> /home/vagrant/.bash_profile
 
 # Fix locale warning
 sudo echo "LC_CTYPE=\"en_US.UTF-8\"" >> /etc/default/locale
@@ -339,20 +343,20 @@ if [ $KONG_NUM_VERSION -ge 001500 ]; then
 fi
 
 # store the Kong version build, and add a warning
-echo "export KONG_VERSION_BUILD=$KONG_VERSION"                     >> /home/vagrant/.bashrc
-echo "if [ -f \"/kong/bin/kong\" ]; then"                          >> /home/vagrant/.bashrc
-echo "  pushd /kong > /dev/null"                                   >> /home/vagrant/.bashrc
-echo "  LAST_TAG=\$(git describe --tags)"                          >> /home/vagrant/.bashrc
-echo "  if [ ! \"\$LAST_TAG\" == \"\$KONG_VERSION_BUILD\" ]; then" >> /home/vagrant/.bashrc
-echo "    echo \"*******************************************************************************\""   >> /home/vagrant/.bashrc
-echo "    echo \" WARNING: The Kong source in /kong has latest tag \$LAST_TAG\""                      >> /home/vagrant/.bashrc
-echo "    echo \"          whilst this vagrant box was build against version \$KONG_VERSION_BUILD.\"" >> /home/vagrant/.bashrc
-echo "    echo \"          Please make sure the checked-out version in /kong matches the\""           >> /home/vagrant/.bashrc
-echo "    echo \"          binaries of \$KONG_VERSION_BUILD.\""                                       >> /home/vagrant/.bashrc
-echo "    echo \"*******************************************************************************\""   >> /home/vagrant/.bashrc
-echo "  fi"                                                        >> /home/vagrant/.bashrc
-echo "  popd > /dev/null"                                          >> /home/vagrant/.bashrc
-echo "fi"                                                          >> /home/vagrant/.bashrc
+echo "export KONG_VERSION_BUILD=$KONG_VERSION"                     >> /home/vagrant/.bash_profile
+echo "if [ -f \"/kong/bin/kong\" ]; then"                          >> /home/vagrant/.bash_profile
+echo "  pushd /kong > /dev/null"                                   >> /home/vagrant/.bash_profile
+echo "  LAST_TAG=\$(git describe --tags)"                          >> /home/vagrant/.bash_profile
+echo "  if [ ! \"\$LAST_TAG\" == \"\$KONG_VERSION_BUILD\" ]; then" >> /home/vagrant/.bash_profile
+echo "    echo \"*******************************************************************************\""   >> /home/vagrant/.bash_profile
+echo "    echo \" WARNING: The Kong source in /kong has latest tag \$LAST_TAG\""                      >> /home/vagrant/.bash_profile
+echo "    echo \"          whilst this vagrant box was build against version \$KONG_VERSION_BUILD.\"" >> /home/vagrant/.bash_profile
+echo "    echo \"          Please make sure the checked-out version in /kong matches the\""           >> /home/vagrant/.bash_profile
+echo "    echo \"          binaries of \$KONG_VERSION_BUILD.\""                                       >> /home/vagrant/.bash_profile
+echo "    echo \"*******************************************************************************\""   >> /home/vagrant/.bash_profile
+echo "  fi"                                                        >> /home/vagrant/.bash_profile
+echo "  popd > /dev/null"                                          >> /home/vagrant/.bash_profile
+echo "fi"                                                          >> /home/vagrant/.bash_profile
 
 
 echo .

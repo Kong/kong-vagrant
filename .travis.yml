@@ -20,10 +20,13 @@ install:
   # Install vagrant-libvirt Vagrant plugin
   - sudo vagrant plugin install vagrant-libvirt
 
+  - git clone https://github.com/Kong/kong.git
+
 script:
   - sudo vagrant validate
-  - git clone https://github.com/Kong/kong.git
   - sudo vagrant up --provider=libvirt
   - sudo vagrant status
   - sudo vagrant ssh -c "cd /kong; git checkout \$KONG_VERSION_BUILD; make dev"
-  - sudo vagrant ssh -c "kong version"
+  - sudo vagrant ssh -c "kong migrations bootstrap"
+  - sudo vagrant ssh -c "kong start"
+  - sudo vagrant ssh -c "http localhost:8001"

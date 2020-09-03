@@ -137,6 +137,10 @@ set +o errexit
 
 sudo sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 sudo -E apt-get install --allow-unauthenticated -qq postgresql-$POSTGRES_VERSION
+if [ $? -ne 0 ]; then
+  echo "failed to install Postgres!"
+  exit 1
+fi
 
 # Configure Postgres
 sudo sed -i "s/#listen_address.*/listen_addresses '*'/" /etc/postgresql/$POSTGRES_VERSION/main/postgresql.conf
@@ -191,6 +195,10 @@ dpkg -f noninteractive --list cassandra > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "Installing Cassandra"
   sudo -E apt-get install -qq --allow-downgrades --allow-remove-essential --allow-change-held-packages cassandra=$CASSANDRA_VERSION
+  if [ $? -ne 0 ]; then
+    echo "failed to install Cassandra, might need to bump the version!"
+    exit 1
+  fi
   sudo /etc/init.d/cassandra restart
 fi
 

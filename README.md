@@ -165,7 +165,7 @@ $ curl -i -X POST \
 
 $ curl -i -X POST \
   --url http://localhost:8001/services/mockbin/routes \
-  --data 'paths=/'
+  --data 'paths[]=/'
 
 # add the custom plugin, to our new api
 $ curl -i -X POST \

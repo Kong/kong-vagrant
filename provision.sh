@@ -251,6 +251,14 @@ if [ -n "$KONG_UTILITIES" ]; then
   popd
 fi
 
+echo "*************************************************************************"
+echo "Installing Go compiler"
+echo "*************************************************************************"
+
+pushd /usr/local
+wget -q -O go.tar.gz https://golang.org/dl/go1.15.5.linux-amd64.tar.gz
+tar -xf go.tar.gz && rm go.tar.gz
+popd
 
 echo "*************************************************************************"
 echo "Update localization, paths, ulimit, etc."
@@ -282,10 +290,10 @@ EOL
 
 
 # Adjust PATH for future SSH
-echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:\$PATH:" >> /home/vagrant/.bash_profile
+echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:/usr/local/go/bin:\$PATH:" >> /home/vagrant/.bash_profile
 
 # Do the same for root so we access to profiling tools
-echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:\$PATH" >> /root/.bashrc
+echo "export PATH=/usr/local/bin:/usr/local/openresty/bin:/opt/stap/bin:/usr/local/stapxx:/usr/local/openresty/nginx/sbin:/usr/local/openresty/luajit/bin:/usr/local/go/bin:\$PATH" >> /root/.bashrc
 
 # Copy host settings
 if [ -n "$LOGLEVEL" ]; then

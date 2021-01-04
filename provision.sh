@@ -216,7 +216,7 @@ if [ $KONG_NUM_VERSION -lt 1000 ]; then
   sudo -E apt-get install -qq dnsmasq
 fi
 
-sudo -E apt install -y ./kong.deb
+sudo -E apt-get install -y ./kong.deb
 rm kong.deb
 
 

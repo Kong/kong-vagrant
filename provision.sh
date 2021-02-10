@@ -25,10 +25,10 @@ echo "Installing Kong version: $KONG_VERSION"
 echo "*************************************************************************"
 
 if [ "$CASSANDRA_VERSION" = "2" ]; then
-   CASSANDRA_VERSION=2.2.13
+   CASSANDRA_VERSION=2.2.19
    CASSANDRA_VERSION_REPO=22x
 else
-   CASSANDRA_VERSION=3.11.9
+   CASSANDRA_VERSION=3.11.10
    CASSANDRA_VERSION_REPO=311x
 fi
 

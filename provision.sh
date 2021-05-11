@@ -40,7 +40,7 @@ KONG_ADMIN_LISTEN="0.0.0.0:8001"
 KONG_ADMIN_LISTEN_SSL="0.0.0.0:8444"
 
 if [ $KONG_NUM_VERSION -gt 001003 ]; then
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.trusty.all.deb"
+  KONG_DOWNLOAD_URL="https://download.konghq.com/gateway-0.x-ubuntu-trusty/pool/all/k/kong-community-edition/kong-community-edition_${KONG_VERSION}_all.deb"
 fi
 
 if [ $KONG_NUM_VERSION -ge 001300 ]; then
@@ -51,7 +51,7 @@ fi
 
 if [ $KONG_NUM_VERSION -ge 001500 ]; then
   # use Bionic now instead of Trusty
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.all.deb"
+  KONG_DOWNLOAD_URL="https://download.konghq.com/gateway-0.x-ubuntu-bionic/pool/all/k/kong-community-edition/kong-community-edition_${KONG_VERSION}_all.deb"
 
   # Let's enable transparent listening option as well
   KONG_PROXY_LISTEN="0.0.0.0:8000 transparent, 0.0.0.0:8443 transparent ssl"
@@ -62,7 +62,7 @@ fi
 
 if [ $KONG_NUM_VERSION -ge 010300 ]; then
   # download name changed
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.bionic.amd64.deb"
+  KONG_DOWNLOAD_URL="https://download.konghq.com/gateway-1.x-ubuntu-bionic/pool/all/k/kong/kong_${KONG_VERSION}_amd64.deb"
 fi
 
 if [ $KONG_NUM_VERSION -ge 020000 ]; then
@@ -71,8 +71,8 @@ if [ $KONG_NUM_VERSION -ge 020000 ]; then
   unset KONG_STREAM_LISTEN
   # update admin to defaults again, but on 0.0.0.0 instead of 127.0.0.1
   KONG_ADMIN_LISTEN="0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384"
-  # use Focal now instead of Bionic
-  KONG_DOWNLOAD_URL="https://bintray.com/kong/kong-deb/download_file?file_path=kong-${KONG_VERSION}.xenial.amd64.deb"
+  # use Xenial now instead of Bionic
+  KONG_DOWNLOAD_URL="https://download.konghq.com/gateway-2.x-ubuntu-xenial/pool/all/k/kong/kong_${KONG_VERSION}_amd64.deb"
 fi
 
 sudo chown -R vagrant /usr/local

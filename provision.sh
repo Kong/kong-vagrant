@@ -219,6 +219,7 @@ fi
 sudo -E apt-get install -y ./kong.deb
 rm kong.deb
 
+sudo -E apt-get install -qq build-essential
 
 if [ -n "$KONG_UTILITIES" ]; then
   echo "*************************************************************************"
@@ -226,7 +227,7 @@ if [ -n "$KONG_UTILITIES" ]; then
   echo "*************************************************************************"
 
   # Install systemtap: https://openresty.org/en/build-systemtap.html
-  sudo -E apt-get install -qq build-essential zlib1g-dev elfutils libdw-dev gettext
+  sudo -E apt-get install -qq zlib1g-dev elfutils libdw-dev gettext
   wget -q http://sourceware.org/systemtap/ftp/releases/systemtap-4.0.tar.gz
   tar -xf systemtap-4.0.tar.gz
   pushd systemtap-4.0/

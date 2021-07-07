@@ -121,7 +121,8 @@ fi
 sudo -E apt-get install -qq httpie jq
 sudo -E apt-get install -qq git curl make pkg-config unzip apt-transport-https \
                             language-pack-en libssl-dev m4 cpanminus zlibc \
-                            zlib1g-dev libyaml-dev postgresql-common
+                            zlib1g-dev libyaml-dev postgresql-common build-essential
+
 
 echo "*************************************************************************"
 echo "Installing test tools for Test::Nginx"
@@ -219,14 +220,13 @@ fi
 sudo -E apt-get install -y ./kong.deb
 rm kong.deb
 
-
 if [ -n "$KONG_UTILITIES" ]; then
   echo "*************************************************************************"
   echo "Installing systemtap, stapxx, and openresty-systemtap-toolkit"
   echo "*************************************************************************"
 
   # Install systemtap: https://openresty.org/en/build-systemtap.html
-  sudo -E apt-get install -qq build-essential zlib1g-dev elfutils libdw-dev gettext
+  sudo -E apt-get install -qq zlib1g-dev elfutils libdw-dev gettext
   wget -q http://sourceware.org/systemtap/ftp/releases/systemtap-4.0.tar.gz
   tar -xf systemtap-4.0.tar.gz
   pushd systemtap-4.0/

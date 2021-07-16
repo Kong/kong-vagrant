@@ -21,7 +21,7 @@ install:
   - sudo vagrant plugin install vagrant-libvirt
 
   - git clone https://github.com/Kong/kong.git
-  - git clone https://github.com/Kong/kong-plugin.git
+  - git clone -b tests/fix https://github.com/Kong/kong-plugin.git
 
 script:
   - sudo vagrant validate

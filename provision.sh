@@ -72,7 +72,7 @@ if [ $KONG_NUM_VERSION -ge 020000 ]; then
   # update admin to defaults again, but on 0.0.0.0 instead of 127.0.0.1
   KONG_ADMIN_LISTEN="0.0.0.0:8001 reuseport backlog=16384, 0.0.0.0:8444 http2 ssl reuseport backlog=16384"
   # use Xenial now instead of Bionic
-  KONG_DOWNLOAD_URL="https://download.konghq.com/gateway-2.x-ubuntu-focal/pool/all/k/kong/kong_${KONG_VERSION}_amd64.deb"
+  KONG_DOWNLOAD_URL="https://download.konghq.com/gateway-${KONG_MAJOR}.x-ubuntu-focal/pool/all/k/kong/kong_${KONG_VERSION}_amd64.deb"
 fi
 
 sudo chown -R vagrant /usr/local

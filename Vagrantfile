@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ENV["KONG_VERSION"]
     version = ENV["KONG_VERSION"]
   else
-    version = "3.2.2"
+    version = "3.3.0"
   end
 
   if ENV["KONG_CASSANDRA"]

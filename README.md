@@ -1,4 +1,13 @@
-[![Build Status](https://travis-ci.com/Kong/kong-vagrant.svg?branch=master)](https://travis-ci.com/Kong/kong-vagrant)
+This repository is outdated and no longer functional. Vagrant has served us well, but due to more dependencies being
+added to the Kong eco-system we have found docker based environments easier to work with.
+
+For plugin development please check out [Pongo](https://github.com/Kong/kong-pongo). For Kong development see the
+[Kong repository](https://github.com/Kong/kong/blob/master/DEVELOPER.md).
+
+# So long, and thanks for all the fish! 
+
+
+---
 
 # [Kong][website-url] :heavy_plus_sign: [Vagrant](https://www.vagrantup.com/)
 
